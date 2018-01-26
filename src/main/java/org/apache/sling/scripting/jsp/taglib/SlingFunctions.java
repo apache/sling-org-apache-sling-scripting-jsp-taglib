@@ -16,8 +16,13 @@
  */
 package org.apache.sling.scripting.jsp.taglib;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -34,8 +39,7 @@ public class SlingFunctions {
 	/**
 	 * The SLF4J Logger.
 	 */
-	private static final Logger log = LoggerFactory
-			.getLogger(SlingFunctions.class);
+	private static final Logger log = LoggerFactory.getLogger(SlingFunctions.class);
 
 	/**
 	 * Adapt the adaptable to the adapter class.
@@ -46,8 +50,7 @@ public class SlingFunctions {
 	 *            the class to which to adapt the adaptable
 	 * @return the adapted class instance
 	 */
-	public static Object adaptTo(Adaptable adaptable, String adapter)
-			throws ClassNotFoundException {
+	public static Object adaptTo(Adaptable adaptable, String adapter) throws ClassNotFoundException {
 		log.trace("adaptTo");
 		Object adapted = null;
 
@@ -71,7 +74,8 @@ public class SlingFunctions {
 	 * @param value
 	 *            The text to encode
 	 * @param mode
-	 *            The XSS mode to use, see XSSSupport for the list of available modes
+	 *            The XSS mode to use, see XSSSupport for the list of available
+	 *            modes
 	 * @return the encoded text
 	 */
 	public static String encode(String value, String mode) {
@@ -89,19 +93,70 @@ public class SlingFunctions {
 	 *            The language in which the query is formulated.
 	 * @return An Iterator of Resource objects matching the query.
 	 */
-	public static Iterator<Resource> findResources(
-			ResourceResolver resourceResolver, String query, String language) {
+	public static Iterator<Resource> findResources(ResourceResolver resourceResolver, String query, String language) {
 		log.trace("findResources");
 
 		Iterator<Resource> resources = null;
 		if (resourceResolver != null) {
-			log.debug("Finding resources with query {} of type {}", query,
-					language);
+			log.debug("Finding resources with query {} of type {}", query, language);
 			resources = resourceResolver.findResources(query, language);
 		} else {
 			log.warn("Null resolver specified");
 		}
 		return resources;
+	}
+
+	/**
+	 * Method for retrieving an absolute parent resource.
+	 * 
+	 * @param current
+	 *            the current resource
+	 * @param level
+	 *            the absolute level for the parent resource to retrieve
+	 * @return the parent resource at the level
+	 */
+	public static final Resource getAbsoluteParent(Resource current, String level) {
+		log.trace("getAbsoluteParent");
+		Resource parent = null;
+		if (level != null) {
+			String[] segments = current.getPath().split("\\/");
+			int end = Integer.parseInt(level, 10);
+			String parentPath = "/" + StringUtils.join(Arrays.copyOfRange(segments, 1, end + 1), "/");
+			log.debug("Retrieving {} parent resource at path {}", level, parentPath);
+			parent = current.getResourceResolver().getResource(parentPath);
+		} else {
+			log.debug("Retrieving parent resource");
+			parent = current.getParent();
+		}
+		return parent;
+	}
+
+	/**
+	 * Function for retrieving all of the parent resources of a specified
+	 * resource, returning them in hierarchy order.
+	 * 
+	 * @param current
+	 *            the current resource for which to retrieve the parents
+	 * @param startDepth
+	 *            The depth at which to start, for example given a path of:
+	 *            /content/page1/page2/page3 and a start depth of 3, the parents
+	 *            page2/page3 would be returned
+	 * @return an iterator of the parent resources in order
+	 */
+	public static final Iterator<Resource> getParents(Resource current, String startDepth) {
+		List<Resource> parents = new ArrayList<Resource>();
+		while (true) {
+			Resource parent = current.getParent();
+			if (parent != null) {
+				parents.add(parent);
+				current = parent;
+			} else {
+				break;
+			}
+		}
+		Collections.reverse(parents);
+
+		return parents.subList(Integer.parseInt(startDepth, 10), parents.size()).iterator();
 	}
 
 	/**
@@ -118,8 +173,7 @@ public class SlingFunctions {
 
 		Resource relative = null;
 		if (base != null) {
-			log.debug("Getting relative resource of {} at path {}",
-					base.getPath(), path);
+			log.debug("Getting relative resource of {} at path {}", base.getPath(), path);
 			relative = base.getResourceResolver().getResource(base, path);
 		} else {
 			log.warn("Null base resource specified");
@@ -137,8 +191,7 @@ public class SlingFunctions {
 	 *            the path of the resource to retrieve
 	 * @return the resource at the path or null
 	 */
-	public static final Resource getResource(ResourceResolver resolver,
-			String path) {
+	public static final Resource getResource(ResourceResolver resolver, String path) {
 		log.trace("getResource");
 
 		log.debug("Getting resource at path {}", path);
@@ -163,8 +216,7 @@ public class SlingFunctions {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <E> E getValue(ValueMap properties, String key,
-			Object defaultOrType) {
+	public static final <E> E getValue(ValueMap properties, String key, Object defaultOrType) {
 		if (defaultOrType instanceof Class<?>) {
 			return properties.get(key, (Class<E>) defaultOrType);
 		} else {
@@ -215,10 +267,8 @@ public class SlingFunctions {
 	 * @throws ClassNotFoundException
 	 *             a class with the specified name could not be found
 	 */
-	private static Class<?> loadClass(String className)
-			throws ClassNotFoundException {
-		return Thread.currentThread().getContextClassLoader()
-				.loadClass(className);
+	private static Class<?> loadClass(String className) throws ClassNotFoundException {
+		return Thread.currentThread().getContextClassLoader().loadClass(className);
 	}
 
 }

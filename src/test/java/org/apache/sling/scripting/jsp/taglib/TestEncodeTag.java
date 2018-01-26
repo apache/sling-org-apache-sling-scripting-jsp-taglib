@@ -17,15 +17,12 @@
 package org.apache.sling.scripting.jsp.taglib;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
-import org.apache.sling.api.resource.ValueMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -43,12 +40,11 @@ public class TestEncodeTag {
 	private EncodeTag encodeTag;
 	private MockPageContext pageContext;
 	private StringBuilder sb;
-	private static final String VAR_KEY = "properties";
+
 
 	/**
 	 * Initializes the fields for this test.
 	 */
-	@SuppressWarnings("serial")
 	@Before
 	public void init() {
 		log.info("init");

@@ -35,6 +35,18 @@
 		<function-class>org.apache.sling.scripting.jsp.taglib.SlingFunctions</function-class>
 		<function-signature>java.util.Iterator findResources(org.apache.sling.api.resource.ResourceResolver, java.lang.String, java.lang.String)</function-signature>
 	</function>
+	
+	<function>
+		<name>getAbsoluteParent</name>
+		<function-class>org.apache.sling.scripting.jsp.taglib.SlingFunctions</function-class>
+		<function-signature>org.apache.sling.api.resource.Resource getAbsoluteParent(org.apache.sling.api.resource.Resource,java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<name>getParents</name>
+		<function-class>org.apache.sling.scripting.jsp.taglib.SlingFunctions</function-class>
+		<function-signature>java.util.Iterator getParents(org.apache.sling.api.resource.Resource,java.lang.String)</function-signature>
+	</function>
 
 	<function>
 		<name>getRelativeResource</name>
@@ -518,6 +530,90 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	
+	<tag>
+		<description>
+			Retrieves the parent of the resource or the absolute parent 
+			at the level if specified.
+		</description>
+		<name>getParent</name>
+		<tag-class>
+			org.apache.sling.scripting.jsp.taglib.GetParentTag
+		</tag-class>
+        <tei-class>
+            org.apache.sling.scripting.jsp.taglib.tei.ResourceVariableTEI
+        </tei-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>
+				The name of the variable to which to save the parent resource.
+			</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The resource for which to retrieve the parent resource.
+			</description>
+			<name>resource</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The level of the parent resource to retrieve
+			</description>
+			<name>level</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	
+	<tag>
+		<description>
+			Retrieves all of the parent resources of a specified
+			resource, returning them
+			in hierarchy order.
+		</description>
+		<name>getParents</name>
+		<tag-class>
+			org.apache.sling.scripting.jsp.taglib.GetParentsTag
+		</tag-class>
+		<tei-class>
+			org.apache.sling.scripting.jsp.taglib.tei.ResourceIteratorVariableTEI
+		</tei-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>
+				The name of the variable to which to save the parent
+				resources.
+			</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The resource for which to retrieve the parent resources.
+			</description>
+			<name>resource</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The depth at which to start, for example given a path
+				of: /content/page1/page2/page3 and a start depth of 3, the parents
+				page2/page3 would be returned
+			</description>
+			<name>startDepth</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
 
 	<tag>
 		<description>
