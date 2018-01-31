@@ -63,8 +63,13 @@ public class GetParentsTag extends TagSupport {
 			}
 		}
 		Collections.reverse(parents);
-	
-		parents = parents.subList(Integer.parseInt(startDepth,10), parents.size());
+		
+		int depth = Integer.parseInt(startDepth,10);
+		if(depth <= parents.size()){
+			parents = parents.subList(depth, parents.size());
+		} else {
+			parents.clear();
+		}
 
 		log.debug("Saving {} to variable {}", parents, var);
 		pageContext.setAttribute(var, parents.iterator());

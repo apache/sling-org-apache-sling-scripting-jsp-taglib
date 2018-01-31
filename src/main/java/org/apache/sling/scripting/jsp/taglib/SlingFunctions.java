@@ -156,7 +156,13 @@ public class SlingFunctions {
 		}
 		Collections.reverse(parents);
 
-		return parents.subList(Integer.parseInt(startDepth, 10), parents.size()).iterator();
+		int depth = Integer.parseInt(startDepth,10);
+		if(depth <= parents.size()){
+			parents = parents.subList(depth, parents.size());
+		} else {
+			parents.clear();
+		}
+		return parents.iterator();
 	}
 
 	/**
