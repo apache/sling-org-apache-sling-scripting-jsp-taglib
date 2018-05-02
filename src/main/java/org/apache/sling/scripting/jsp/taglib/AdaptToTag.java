@@ -61,7 +61,7 @@ public class AdaptToTag extends TagSupport {
 			log.debug("Saving " + adapted + " to variable " + var);
 			pageContext.setAttribute(var, adapted);
 		} else {
-			log.warn("Null adaptable specified");
+			log.debug("Null adaptable specified");
 		}
 
 		return EVAL_PAGE;

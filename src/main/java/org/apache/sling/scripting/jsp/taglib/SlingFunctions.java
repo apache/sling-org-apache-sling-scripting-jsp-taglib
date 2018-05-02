@@ -63,7 +63,7 @@ public class SlingFunctions {
 				log.error("Could not load class " + adapter, e);
 			}
 		} else {
-			log.warn("Null adaptable specified");
+			log.debug("Null adaptable specified");
 		}
 		return adapted;
 	}
