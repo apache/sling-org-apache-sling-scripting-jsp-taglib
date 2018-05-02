@@ -27,6 +27,7 @@ import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,8 +133,44 @@ public class SlingFunctions {
 	}
 
 	/**
-	 * Function for retrieving all of the parent resources of a specified
-	 * resource, returning them in hierarchy order.
+	 * Method for retrieving the CA Config resource for a specified resource
+	 * 
+	 * @param resource
+	 *            the resource for which to retrieve the CA Config resource
+	 * @param bucket
+	 *            the bucket name of the configuration to retrieve
+	 * @param name
+	 *            the configuration name to retrieve
+	 * @return the config resource
+	 */
+	public static final Resource getCAConfigResource(Resource resource, String bucket, String name) {
+		log.trace("getCAConfigResource");
+		ConfigurationResourceResolver caResourceResolver = resource.getResourceResolver()
+				.adaptTo(ConfigurationResourceResolver.class);
+		return caResourceResolver.getResource(resource, bucket, name);
+	}
+
+	/**
+	 * Method for retrieving the CA Config resources for a specified resource
+	 * 
+	 * @param resource
+	 *            the resource for which to retrieve the CA Config resources
+	 * @param bucket
+	 *            the bucket name of the configuration to retrieve
+	 * @param name
+	 *            the configuration name to retrieve
+	 * @return the config resources
+	 */
+	public static final Iterator<Resource> getCAConfigResources(Resource resource, String bucket, String name) {
+		log.trace("getCAConfigResource");
+		ConfigurationResourceResolver caResourceResolver = resource.getResourceResolver()
+				.adaptTo(ConfigurationResourceResolver.class);
+		return caResourceResolver.getResourceCollection(resource, bucket, name).iterator();
+	}
+
+	/**
+	 * Function for retrieving all of the parent resources of a specified resource,
+	 * returning them in hierarchy order.
 	 * 
 	 * @param current
 	 *            the current resource for which to retrieve the parents
@@ -156,8 +193,8 @@ public class SlingFunctions {
 		}
 		Collections.reverse(parents);
 
-		int depth = Integer.parseInt(startDepth,10);
-		if(depth <= parents.size()){
+		int depth = Integer.parseInt(startDepth, 10);
+		if (depth <= parents.size()) {
 			parents = parents.subList(depth, parents.size());
 		} else {
 			parents.clear();
@@ -208,8 +245,8 @@ public class SlingFunctions {
 	}
 
 	/**
-	 * Gets the value of the specified key from the ValueMap and either coerses
-	 * the value into the specified type or uses the specified type as a default
+	 * Gets the value of the specified key from the ValueMap and either coerses the
+	 * value into the specified type or uses the specified type as a default
 	 * depending on the parameter passed in.
 	 * 
 	 * @param properties
@@ -217,8 +254,7 @@ public class SlingFunctions {
 	 * @param key
 	 *            the key for the value to retrieve
 	 * @param defaultOrType
-	 *            either the default value or the class to which to coerce the
-	 *            value
+	 *            either the default value or the class to which to coerce the value
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -243,8 +279,7 @@ public class SlingFunctions {
 	}
 
 	/**
-	 * Method for allowing the invocation of the Sling Resource listChildren
-	 * method.
+	 * Method for allowing the invocation of the Sling Resource listChildren method.
 	 * 
 	 * @param resource
 	 *            the resource of which to list the children

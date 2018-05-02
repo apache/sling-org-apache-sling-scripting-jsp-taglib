@@ -84,11 +84,6 @@ public class GetResourceTag extends TagSupport {
 		return base;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-	 */
 	/**
 	 * Get the path of the resource to retrieve.
 	 * 

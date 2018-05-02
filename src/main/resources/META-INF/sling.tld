@@ -533,6 +533,98 @@
 	
 	<tag>
 		<description>
+			Retrieves Context-Aware Configuration resource for a specified resource, bucket and name.
+		</description>
+		<name>getCAConfigResource</name>
+		<tag-class>
+			org.apache.sling.scripting.jsp.taglib.GetCAConfigResourceTag
+		</tag-class>
+        <tei-class>
+            org.apache.sling.scripting.jsp.taglib.tei.ResourceVariableTEI
+        </tei-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>
+				The name of the variable to which to save the CA config resource.
+			</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The resource for which to retrieve CA Config
+			</description>
+			<name>resource</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The bucket name to retrieve for the config
+			</description>
+			<name>bucket</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The config name to retrieve
+			</description>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<description>
+			Retrieves Context-Aware Configuration resources for a specified resource, bucket and name.
+		</description>
+		<name>getCAConfigResources</name>
+		<tag-class>
+			org.apache.sling.scripting.jsp.taglib.GetCAConfigResourcesTag
+		</tag-class>
+        <tei-class>
+            org.apache.sling.scripting.jsp.taglib.tei.ResourceIteratorVariableTEI
+        </tei-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>
+				The name of the variable to which to save the CA config resources
+			</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The resource for which to retrieve CA Configs
+			</description>
+			<name>resource</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The bucket name to retrieve for the configs
+			</description>
+			<name>bucket</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>
+				The config name to retrieve
+			</description>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<description>
 			Retrieves the parent of the resource or the absolute parent 
 			at the level if specified.
 		</description>
@@ -630,7 +722,7 @@
 		<body-content>empty</body-content>
 		<attribute>
 			<description>
-				The name of the variable to which to save the resource.
+				The name of the variable to which to save the value.
 			</description>
 			<name>var</name>
 			<required>false</required>
