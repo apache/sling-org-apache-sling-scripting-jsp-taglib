@@ -21,6 +21,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport;
 import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport.ENCODING_MODE;
 import org.slf4j.Logger;
@@ -51,8 +52,7 @@ public class EncodeTag extends BodyTagSupport {
 
 		if (readBody) {
 			if (bodyContent != null && bodyContent.getString() != null) {
-				String encoded = XSSSupport.encode(bodyContent.getString(),
-						mode);
+				String encoded = XSSSupport.encode(bodyContent.getString(), mode);
 				write(encoded);
 			}
 		}
@@ -68,7 +68,7 @@ public class EncodeTag extends BodyTagSupport {
 	public int doStartTag() throws JspException {
 		int res = SKIP_BODY;
 		String unencoded = value;
-		if (unencoded == null) {
+		if (StringUtils.isBlank(unencoded)) {
 			unencoded = defaultValue;
 		}
 
@@ -140,8 +140,7 @@ public class EncodeTag extends BodyTagSupport {
 				pageContext.getOut().write(encoded);
 			} catch (IOException e) {
 				log.error("Exception writing escaped content to page", e);
-				throw new JspException(
-						"Exception writing escaped content to page", e);
+				throw new JspException("Exception writing escaped content to page", e);
 			}
 		}
 	}
