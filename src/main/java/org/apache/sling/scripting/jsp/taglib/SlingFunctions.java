@@ -50,6 +50,8 @@ public class SlingFunctions {
 	 * @param adapter
 	 *            the class to which to adapt the adaptable
 	 * @return the adapted class instance
+	 * @throws ClassNotFoundException
+	 *             the adapter class was not found by the Classloader
 	 */
 	public static Object adaptTo(Adaptable adaptable, String adapter) throws ClassNotFoundException {
 		log.trace("adaptTo");
@@ -88,6 +90,8 @@ public class SlingFunctions {
 	 * language.
 	 * 
 	 * @param resourceResolver
+	 *            the resource resolver to use to find resources with the specified
+	 *            query
 	 * @param query
 	 *            The query string to use to find the resources.
 	 * @param language
@@ -255,7 +259,7 @@ public class SlingFunctions {
 	 *            the key for the value to retrieve
 	 * @param defaultOrType
 	 *            either the default value or the class to which to coerce the value
-	 * @return
+	 * @return the value for the specified key or the default
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <E> E getValue(ValueMap properties, String key, Object defaultOrType) {

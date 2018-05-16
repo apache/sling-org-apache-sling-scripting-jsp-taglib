@@ -71,7 +71,7 @@ public class GetParentTag extends TagSupport {
 	/**
 	 * Gets the resource.
 	 * 
-	 * @return the base resource
+	 * @return the resource
 	 */
 	public Resource getResource() {
 		return resource;
@@ -98,7 +98,7 @@ public class GetParentTag extends TagSupport {
 	/**
 	 * Sets the resource.
 	 * 
-	 * @param base
+	 * @param resource
 	 *            the new resource
 	 */
 	public void setResource(Resource resource) {

@@ -55,7 +55,7 @@ public class GetParentsTag extends TagSupport {
 		Resource current = resource;
 		while (true) {
 			Resource parent = current.getParent();
-			if(parent != null){
+			if (parent != null) {
 				parents.add(parent);
 				current = parent;
 			} else {
@@ -63,9 +63,9 @@ public class GetParentsTag extends TagSupport {
 			}
 		}
 		Collections.reverse(parents);
-		
-		int depth = Integer.parseInt(startDepth,10);
-		if(depth <= parents.size()){
+
+		int depth = Integer.parseInt(startDepth, 10);
+		if (depth <= parents.size()) {
 			parents = parents.subList(depth, parents.size());
 		} else {
 			parents.clear();
@@ -80,7 +80,7 @@ public class GetParentsTag extends TagSupport {
 	/**
 	 * Gets the resource.
 	 * 
-	 * @return the base resource
+	 * @return the resource
 	 */
 	public Resource getResource() {
 		return resource;
@@ -107,7 +107,7 @@ public class GetParentsTag extends TagSupport {
 	/**
 	 * Sets the resource.
 	 * 
-	 * @param base
+	 * @param resource
 	 *            the new resource
 	 */
 	public void setResource(Resource resource) {
@@ -116,10 +116,11 @@ public class GetParentsTag extends TagSupport {
 
 	/**
 	 * The depth at which to start, for example given a path of:
-	 * /content/page1/page2/page3 and a start depth of 3, the parents
-	 * page2/page3 would be returned
+	 * /content/page1/page2/page3 and a start depth of 3, the parents page2/page3
+	 * would be returned
 	 * 
 	 * @param startDepth
+	 *            the start depth from which to retrieve the parent resources
 	 */
 	public void setStartDepth(String startDepth) {
 		this.startDepth = startDepth;

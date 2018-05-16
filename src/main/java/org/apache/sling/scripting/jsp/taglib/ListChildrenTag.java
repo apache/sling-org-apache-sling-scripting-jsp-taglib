@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Tag for listing the children of a Resource. The children will be returned as
- * an Iterator<Resource> in the specified variable.
+ * an Iterator of Resource objects in the specified variable.
  */
 public class ListChildrenTag extends TagSupport {
 
