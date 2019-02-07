@@ -21,10 +21,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.servlet.ServletRequest;
+
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.scripting.SlingScript;
+import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.apache.sling.commons.testing.sling.MockResource;
 import org.apache.sling.commons.testing.sling.MockResourceResolver;
+import org.apache.sling.commons.testing.sling.MockSlingHttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -37,97 +45,193 @@ import org.slf4j.LoggerFactory;
  */
 public class TestGetResourceTag {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(TestGetResourceTag.class);
-	private GetResourceTag getResourceTag;
-	private MockResource resource;
-	private MockPageContext pageContext;
-	private static final String VAR_KEY = "resource";
-	private static final String TEST_ABSOLUTE_PATH = "/content";
-	private static final String TEST_RELATIVE_PATH = "test";
-	private static final String TEST_NON_PATH = "/content/page";
+    private static final Logger log = LoggerFactory.getLogger(TestGetResourceTag.class);
+    private GetResourceTag getResourceTag;
+    private MockResource resource;
+    private MockPageContext pageContext;
+    private MockSlingHttpServletRequest request;
+    private static final String VAR_KEY = "resource";
+    private static final String TEST_ABSOLUTE_PATH = "/content";
+    private static final String TEST_RELATIVE_PATH = "test";
+    private static final String TEST_NON_PATH = "/content/page";
 
-	/**
-	 * Initializes the fields for this test.
-	 */
-	@SuppressWarnings("serial")
-	@Before
-	public void init() {
-		log.info("init");
+    /**
+     * Initializes the fields for this test.
+     */
+    @Before
+    public void init() {
+        log.info("init");
 
-		final MockResourceResolver resolver = new MockResourceResolver();
+        final MockResourceResolver resolver = new MockResourceResolver();
 
-		resource = new MockResource(resolver, TEST_ABSOLUTE_PATH, "test");
-		resolver.addResource(resource);
+        resource = new MockResource(resolver, TEST_ABSOLUTE_PATH, "test");
+        resolver.addResource(resource);
 
-		MockResource child = new MockResource(resolver, TEST_ABSOLUTE_PATH
-				+ "/" + TEST_RELATIVE_PATH, "test");
-		resolver.addResource(child);
+        MockResource child = new MockResource(resolver, TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH, "test");
+        resolver.addResource(child);
 
-		getResourceTag = new GetResourceTag() {
-			protected ResourceResolver getResourceResolver() {
-				return resolver;
-			}
-		};
+        getResourceTag = new GetResourceTag();
 
-		pageContext = new MockPageContext();
-		getResourceTag.setPageContext(pageContext);
+        final SlingBindings bindings = new SlingBindings();
+        bindings.setSling(new SlingScriptHelper() {
 
-		log.info("init Complete");
-	}
+            @Override
+            public SlingHttpServletRequest getRequest() {
+                return request;
+            }
 
-	/**
-	 * Tests using an absolute path.
-	 */
-	@Test
-	public void testAbsolutePath() {
-		log.info("testAbsolutePath");
+            @Override
+            public SlingHttpServletResponse getResponse() {
+                throw new UnsupportedOperationException();
+            }
 
-		getResourceTag.setVar(VAR_KEY);
-		getResourceTag.setPath(TEST_ABSOLUTE_PATH);
-		getResourceTag.doEndTag();
-		Object result = pageContext.getAttribute(VAR_KEY);
-		assertNotNull(result);
-		assertTrue(result instanceof Resource);
-		assertEquals(TEST_ABSOLUTE_PATH, ((Resource) result).getPath());
+            @Override
+            public SlingScript getScript() {
+                throw new UnsupportedOperationException();
+            }
 
-		log.info("Test successful!");
-	}
+            @Override
+            public void include(String path) {
+                throw new UnsupportedOperationException();
+            }
 
-	/**
-	 * Tests using an relative path.
-	 */
-	@Test
-	public void testRelativePath() {
-		log.info("testRelativePath");
+            @Override
+            public void include(String path, String requestDispatcherOptions) {
+                throw new UnsupportedOperationException();
+            }
 
-		getResourceTag.setVar(VAR_KEY);
-		getResourceTag.setBase(resource);
-		getResourceTag.setPath(TEST_RELATIVE_PATH);
-		getResourceTag.doEndTag();
-		Object result = pageContext.getAttribute(VAR_KEY);
-		assertNotNull(result);
-		assertTrue(result instanceof Resource);
-		assertEquals(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH,
-				((Resource) result).getPath());
+            @Override
+            public void include(String path, RequestDispatcherOptions options) {
+                throw new UnsupportedOperationException();
+            }
 
-		log.info("Test successful!");
-	}
+            @Override
+            public void include(Resource resource) {
+                throw new UnsupportedOperationException();
+            }
 
-	/**
-	 * Tests to see what happens if a bad path is specified, this should just
-	 * return a null value instead of a resource.
-	 */
-	@Test
-	public void testBadPath() {
-		log.info("testBadPath");
+            @Override
+            public void include(Resource resource, String requestDispatcherOptions) {
+                throw new UnsupportedOperationException();
+            }
 
-		getResourceTag.setVar(VAR_KEY);
-		getResourceTag.setPath(TEST_NON_PATH);
-		getResourceTag.doEndTag();
-		Object result = pageContext.getAttribute(VAR_KEY);
-		assertNull(result);
+            @Override
+            public void include(Resource resource, RequestDispatcherOptions options) {
+                throw new UnsupportedOperationException();
+            }
 
-		log.info("Test successful!");
-	}
+            @Override
+            public void forward(String path) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void forward(String path, String requestDispatcherOptions) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void forward(String path, RequestDispatcherOptions options) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void forward(Resource resource) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void forward(Resource resource, String requestDispatcherOptions) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void forward(Resource resource, RequestDispatcherOptions options) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public <ServiceType> ServiceType getService(Class<ServiceType> serviceType) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public <ServiceType> ServiceType[] getServices(Class<ServiceType> serviceType, String filter) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void dispose() {
+                throw new UnsupportedOperationException();
+            }
+        });
+        request = new MockSlingHttpServletRequest(TEST_ABSOLUTE_PATH, "", "html", "", "") {
+            public Object getAttribute(String name) {
+                return bindings;
+            }
+        };
+        request.setResourceResolver(resolver);
+        pageContext = new MockPageContext() {
+            public ServletRequest getRequest() {
+                return request;
+            }
+        };
+        getResourceTag.setPageContext(pageContext);
+
+        log.info("init Complete");
+    }
+
+    /**
+     * Tests using an absolute path.
+     */
+    @Test
+    public void testAbsolutePath() {
+        log.info("testAbsolutePath");
+
+        getResourceTag.setVar(VAR_KEY);
+        getResourceTag.setPath(TEST_ABSOLUTE_PATH);
+        getResourceTag.doEndTag();
+        Object result = pageContext.getAttribute(VAR_KEY);
+        assertNotNull(result);
+        assertTrue(result instanceof Resource);
+        assertEquals(TEST_ABSOLUTE_PATH, ((Resource) result).getPath());
+
+        log.info("Test successful!");
+    }
+
+    /**
+     * Tests using an relative path.
+     */
+    @Test
+    public void testRelativePath() {
+        log.info("testRelativePath");
+
+        getResourceTag.setVar(VAR_KEY);
+        getResourceTag.setBase(resource);
+        getResourceTag.setPath(TEST_RELATIVE_PATH);
+        getResourceTag.doEndTag();
+        Object result = pageContext.getAttribute(VAR_KEY);
+        assertNotNull(result);
+        assertTrue(result instanceof Resource);
+        assertEquals(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH, ((Resource) result).getPath());
+
+        log.info("Test successful!");
+    }
+
+    /**
+     * Tests to see what happens if a bad path is specified, this should just return
+     * a null value instead of a resource.
+     */
+    @Test
+    public void testBadPath() {
+        log.info("testBadPath");
+
+        getResourceTag.setVar(VAR_KEY);
+        getResourceTag.setPath(TEST_NON_PATH);
+        getResourceTag.doEndTag();
+        Object result = pageContext.getAttribute(VAR_KEY);
+        assertNull(result);
+
+        log.info("Test successful!");
+    }
 }
