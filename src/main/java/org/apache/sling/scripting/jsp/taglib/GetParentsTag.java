@@ -32,107 +32,104 @@ import org.slf4j.LoggerFactory;
  */
 public class GetParentsTag extends TagSupport {
 
-	/** The Constant log. */
-	private static final Logger log = LoggerFactory.getLogger(GetParentsTag.class);
+    /** The Constant log. */
+    private static final Logger log = LoggerFactory.getLogger(GetParentsTag.class);
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -7519905660523764503L;
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = -7519905660523764503L;
 
-	/** The current resource. */
-	private Resource resource;
+    /** The current resource. */
+    private transient Resource resource;
 
-	/** The startDepth. */
-	private String startDepth = "0";
+    /** The startDepth. */
+    private String startDepth = "0";
 
-	/** The var. */
-	private String var;
+    /** The var. */
+    private String var;
 
-	@Override
-	public int doEndTag() {
-		log.trace("doEndTag");
+    @Override
+    public int doEndTag() {
+        log.trace("doEndTag");
 
-		List<Resource> parents = new ArrayList<Resource>();
-		Resource current = resource;
-		while (true) {
-			Resource parent = current.getParent();
-			if (parent != null) {
-				parents.add(parent);
-				current = parent;
-			} else {
-				break;
-			}
-		}
-		Collections.reverse(parents);
+        List<Resource> parents = new ArrayList<>();
+        Resource current = resource;
+        while (true) {
+            Resource parent = current.getParent();
+            if (parent != null) {
+                parents.add(parent);
+                current = parent;
+            } else {
+                break;
+            }
+        }
+        Collections.reverse(parents);
 
-		int depth = Integer.parseInt(startDepth, 10);
-		if (depth <= parents.size()) {
-			parents = parents.subList(depth, parents.size());
-		} else {
-			parents.clear();
-		}
+        int depth = Integer.parseInt(startDepth, 10);
+        if (depth <= parents.size()) {
+            parents = parents.subList(depth, parents.size());
+        } else {
+            parents.clear();
+        }
 
-		log.debug("Saving {} to variable {}", parents, var);
-		pageContext.setAttribute(var, parents.iterator());
+        log.debug("Saving {} to variable {}", parents, var);
+        pageContext.setAttribute(var, parents.iterator());
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 
-	/**
-	 * Gets the resource.
-	 * 
-	 * @return the resource
-	 */
-	public Resource getResource() {
-		return resource;
-	}
+    /**
+     * Gets the resource.
+     * 
+     * @return the resource
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
-	/**
-	 * Retrieves the start depth
-	 * 
-	 * @return the start depth to retrieve
-	 */
-	public String getStartDepth() {
-		return startDepth;
-	}
+    /**
+     * Retrieves the start depth
+     * 
+     * @return the start depth to retrieve
+     */
+    public String getStartDepth() {
+        return startDepth;
+    }
 
-	/**
-	 * Gets the variable name to which to save the list of children.
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+    /**
+     * Gets the variable name to which to save the list of children.
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
 
-	/**
-	 * Sets the resource.
-	 * 
-	 * @param resource
-	 *            the new resource
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    /**
+     * Sets the resource.
+     * 
+     * @param resource the new resource
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-	/**
-	 * The depth at which to start, for example given a path of:
-	 * /content/page1/page2/page3 and a start depth of 3, the parents page2/page3
-	 * would be returned
-	 * 
-	 * @param startDepth
-	 *            the start depth from which to retrieve the parent resources
-	 */
-	public void setStartDepth(String startDepth) {
-		this.startDepth = startDepth;
-	}
+    /**
+     * The depth at which to start, for example given a path of:
+     * /content/page1/page2/page3 and a start depth of 3, the parents page2/page3
+     * would be returned
+     * 
+     * @param startDepth the start depth from which to retrieve the parent resources
+     */
+    public void setStartDepth(String startDepth) {
+        this.startDepth = startDepth;
+    }
 
-	/**
-	 * Sets the variable name to which to save the parent resource.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Sets the variable name to which to save the parent resource.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 }

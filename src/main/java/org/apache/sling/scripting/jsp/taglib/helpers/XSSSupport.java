@@ -24,61 +24,62 @@ import org.owasp.esapi.ESAPI;
  */
 public class XSSSupport {
 
-	/**
-	 * The encoding modes supported by this tag.
-	 */
-	public static enum ENCODING_MODE {
-		/**
-		 * Encodes the content as HTML
-		 */
-		HTML, HTML_ATTR, XML, XML_ATTR, JS
-	}
+    /**
+     * The encoding modes supported by this tag.
+     */
+    public enum ENCODING_MODE {
+        /**
+         * Encodes the content as HTML
+         */
+        HTML, HTML_ATTR, JS, XML, XML_ATTR
+    }
 
-	/**
-	 * Encodes the unencoded string using the specified mode. This will be
-	 * deferred to the corresponding OWASP ESAPI encoding method.
-	 *
-	 * @param unencoded
-	 *            the unencoded string
-	 * @param mode
-	 *            the mode with which to encode the string
-	 * @return the encoded string
-	 */
-	public static String encode(String unencoded, ENCODING_MODE mode) {
+    /**
+     * Encodes the unencoded string using the specified mode. This will be deferred
+     * to the corresponding OWASP ESAPI encoding method.
+     *
+     * @param unencoded the unencoded string
+     * @param mode      the mode with which to encode the string
+     * @return the encoded string
+     */
+    public static String encode(String unencoded, ENCODING_MODE mode) {
 
-		String encoded = null;
-		switch (mode) {
-		case HTML:
-			encoded = ESAPI.encoder().encodeForHTML(unencoded);
-			break;
-		case HTML_ATTR:
-			encoded = ESAPI.encoder().encodeForHTMLAttribute(unencoded);
-			break;
-		case XML:
-			encoded = ESAPI.encoder().encodeForXML(unencoded);
-			break;
-		case XML_ATTR:
-			encoded = ESAPI.encoder().encodeForXMLAttribute(unencoded);
-			break;
-		case JS:
-			encoded = ESAPI.encoder().encodeForJavaScript(unencoded);
-			break;
-		default:
-			break;
-		}
-		return encoded;
-	}
+        String encoded = null;
+        switch (mode) {
+        case HTML:
+            encoded = ESAPI.encoder().encodeForHTML(unencoded);
+            break;
+        case HTML_ATTR:
+            encoded = ESAPI.encoder().encodeForHTMLAttribute(unencoded);
+            break;
+        case XML:
+            encoded = ESAPI.encoder().encodeForXML(unencoded);
+            break;
+        case XML_ATTR:
+            encoded = ESAPI.encoder().encodeForXMLAttribute(unencoded);
+            break;
+        case JS:
+            encoded = ESAPI.encoder().encodeForJavaScript(unencoded);
+            break;
+        default:
+            break;
+        }
+        return encoded;
+    }
 
-	/**
-	 * Retrieves the encoding mode associated with the specified string. Will
-	 * throw an IllegalArgumentException if the mode string is not a valid mode
-	 * and will throw a NullPointerException if the mode string is null.
-	 *
-	 * @param modeStr
-	 *            the mode string
-	 * @return the encoding mode
-	 */
-	public static ENCODING_MODE getEncodingMode(String modeStr) {
-		return ENCODING_MODE.valueOf(modeStr.toUpperCase());
-	}
+    /**
+     * Retrieves the encoding mode associated with the specified string. Will throw
+     * an IllegalArgumentException if the mode string is not a valid mode and will
+     * throw a NullPointerException if the mode string is null.
+     *
+     * @param modeStr the mode string
+     * @return the encoding mode
+     */
+    public static ENCODING_MODE getEncodingMode(String modeStr) {
+        return ENCODING_MODE.valueOf(modeStr.toUpperCase());
+    }
+
+    private XSSSupport() {
+        // hide the public constructor
+    }
 }

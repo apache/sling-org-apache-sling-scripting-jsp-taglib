@@ -51,16 +51,17 @@ public class IncludeTagHandler extends AbstractDispatcherTagHandler {
             pageContext.getOut().flush();
         }
         if (var == null) {
-        	dispatcher.include(request, response);
+            dispatcher.include(request, response);
         } else {
-			final CaptureResponseWrapper wrapper = new CaptureResponseWrapper((HttpServletResponse) response);
-			dispatcher.include(request, wrapper);
-			if (!wrapper.isBinaryResponse()) {
-				pageContext.setAttribute(var, wrapper.getCapturedCharacterResponse(), scope);
-			}
-		}
+            final CaptureResponseWrapper wrapper = new CaptureResponseWrapper((HttpServletResponse) response);
+            dispatcher.include(request, wrapper);
+            if (!wrapper.isBinaryResponse()) {
+                pageContext.setAttribute(var, wrapper.getCapturedCharacterResponse(), scope);
+            }
+        }
     }
 
+    @Override
     public void setPageContext(PageContext pageContext) {
         super.setPageContext(pageContext);
 
@@ -75,42 +76,42 @@ public class IncludeTagHandler extends AbstractDispatcherTagHandler {
     }
     
     public void setVar(String var) {
-    	if (var != null && var.trim().length() > 0) {
-    		this.var = var;
-    	}
+        if (var != null && var.trim().length() > 0) {
+            this.var = var;
+        }
     }
     
     // for tag attribute
     public void setScope(String scope) {
-    	this.scope = validScope(scope);
+        this.scope = validScope(scope);
     }
     
-	/**
-	 * Gets the int code for a valid scope, must be one of 'page', 'request',
-	 * 'session' or 'application'. If an invalid or no scope is specified page
-	 * scope is returned.
-	 * 
-	 * @param scope
-	 * @return
-	 */
-	private Integer validScope(String scope) {
-		scope = (scope != null && scope.trim().length() > 0 ? scope.trim()
-				.toUpperCase() : null);
-		if (scope == null) {
-			return PageContext.PAGE_SCOPE;
-		}
+    /**
+     * Gets the int code for a valid scope, must be one of 'page', 'request',
+     * 'session' or 'application'. If an invalid or no scope is specified page
+     * scope is returned.
+     * 
+     * @param scope
+     * @return
+     */
+    private Integer validScope(String scope) {
+        scope = (scope != null && scope.trim().length() > 0 ? scope.trim()
+                .toUpperCase() : null);
+        if (scope == null) {
+            return PageContext.PAGE_SCOPE;
+        }
 
-		String[] scopes = { "PAGE", "REQUEST", "SESSION", "APPLICATION" };
-		Integer[] iaScopes = { PageContext.PAGE_SCOPE,
-				PageContext.REQUEST_SCOPE, PageContext.SESSION_SCOPE,
-				PageContext.APPLICATION_SCOPE };
+        String[] scopes = { "PAGE", "REQUEST", "SESSION", "APPLICATION" };
+        Integer[] iaScopes = { PageContext.PAGE_SCOPE,
+                PageContext.REQUEST_SCOPE, PageContext.SESSION_SCOPE,
+                PageContext.APPLICATION_SCOPE };
 
-		for (int ndx = 0, len = scopes.length; ndx < len; ndx++) {
-			if (scopes[ndx].equals(scope)) {
-				return iaScopes[ndx];
-			}
-		}
-		return PageContext.PAGE_SCOPE;
+        for (int ndx = 0, len = scopes.length; ndx < len; ndx++) {
+            if (scopes[ndx].equals(scope)) {
+                return iaScopes[ndx];
+            }
+        }
+        return PageContext.PAGE_SCOPE;
     }
 
 }

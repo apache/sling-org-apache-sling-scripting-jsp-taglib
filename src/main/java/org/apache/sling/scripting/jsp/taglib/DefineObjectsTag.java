@@ -108,6 +108,7 @@ public class DefineObjectsTag extends TagSupport {
      * Default constructor.
      */
     public DefineObjectsTag() {
+        // default constructor
     }
 
     /**
@@ -123,6 +124,7 @@ public class DefineObjectsTag extends TagSupport {
      *
      * @return always {@link #EVAL_PAGE}.
      */
+    @Override
     public int doEndTag() {
         final SlingBindings bindings = (SlingBindings)pageContext.getRequest().getAttribute(SlingBindings.class.getName());
         final SlingScriptHelper scriptHelper = bindings.getSling();

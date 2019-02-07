@@ -116,9 +116,10 @@ public class DefineObjectsTEI extends TagExtraInfo {
      *
      * @see javax.servlet.jsp.tagext.TagExtraInfo#getVariableInfo(TagData)
      */
+    @Override
     public VariableInfo[] getVariableInfo(TagData data) {
 
-        List<VariableInfo> varInfos = new ArrayList<VariableInfo>();
+        List<VariableInfo> varInfos = new ArrayList<>();
 
         addVar(varInfos, data, ATTR_REQUEST_NAME, DEFAULT_REQUEST_NAME,
             SLING_REQUEST_CLASS);

@@ -30,69 +30,66 @@ import org.slf4j.LoggerFactory;
  */
 public class ListChildrenTag extends TagSupport {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(ListChildrenTag.class);
-	private static final long serialVersionUID = -1945089681840552408L;
-	private Resource resource;
-	private String var;
+    private static final Logger log = LoggerFactory.getLogger(ListChildrenTag.class);
+    private static final long serialVersionUID = -1945089681840552408L;
+    private transient Resource resource;
+    private String var;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-	 */
-	@Override
-	public int doEndTag() {
-		log.trace("doEndTag");
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
+     */
+    @Override
+    public int doEndTag() {
+        log.trace("doEndTag");
 
-		log.debug("Listing the children of resource: " + resource);
+        log.debug("Listing the children of resource: {}", resource);
 
-		Iterator<Resource> children = null;
-		if (resource != null) {
-			children = resource.listChildren();
-		}
+        Iterator<Resource> children = null;
+        if (resource != null) {
+            children = resource.listChildren();
+        }
 
-		log.debug("Saving to variable " + var);
-		pageContext.setAttribute(var, children);
+        log.debug("Saving to variable {}", var);
+        pageContext.setAttribute(var, children);
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 
-	/**
-	 * Gets the resource of which to list the children.
-	 * 
-	 * @return the Sling Resource
-	 */
-	public Resource getResource() {
-		return resource;
-	}
+    /**
+     * Gets the resource of which to list the children.
+     * 
+     * @return the Sling Resource
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
-	/**
-	 * Gets the variable name to which to save the list of children.
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+    /**
+     * Gets the variable name to which to save the list of children.
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
 
-	/**
-	 * Sets the resource of which to list the children.
-	 * 
-	 * @param resource
-	 *            the Sling Resource
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    /**
+     * Sets the resource of which to list the children.
+     * 
+     * @param resource the Sling Resource
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-	/**
-	 * Sets the variable name to which to save the list of children.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Sets the variable name to which to save the list of children.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 }

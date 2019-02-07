@@ -29,96 +29,91 @@ import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
  */
 public abstract class AbstractCATag extends TagSupport {
 
-	/** Serialization UID */
-	private static final long serialVersionUID = -3083138119694952836L;
+    /** Serialization UID */
+    private static final long serialVersionUID = -3083138119694952836L;
 
-	/** The bucket. */
-	private String bucket;
+    /** The bucket. */
+    private String bucket;
 
-	/** The name. */
-	private String name;
+    /** The name. */
+    private String name;
 
-	/** The resource for which to get the configuration. */
-	private Resource resource;
+    /** The resource for which to get the configuration. */
+    private transient Resource resource;
 
-	/** The var. */
-	private String var;
+    /** The var. */
+    private String var;
 
-	/**
-	 * @return the bucket
-	 */
-	public String getBucket() {
-		return bucket;
-	}
+    /**
+     * @return the bucket
+     */
+    public String getBucket() {
+        return bucket;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @return the resource
-	 */
-	public Resource getResource() {
-		return resource;
-	}
+    /**
+     * @return the resource
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
-	/**
-	 * Method for retrieving the ConfigurationResourceResolver from the page
-	 * context.
-	 * 
-	 * @return the resource resolver
-	 */
-	protected ConfigurationResourceResolver getConfigurationResourceResolver() {
-		final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
-				.getAttribute(SlingBindings.class.getName());
-		final SlingScriptHelper scriptHelper = bindings.getSling();
-		final ConfigurationResourceResolver resolver = scriptHelper.getService(ConfigurationResourceResolver.class);
-		return resolver;
-	}
+    /**
+     * Method for retrieving the ConfigurationResourceResolver from the page
+     * context.
+     * 
+     * @return the resource resolver
+     */
+    protected ConfigurationResourceResolver getConfigurationResourceResolver() {
+        final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
+                .getAttribute(SlingBindings.class.getName());
+        final SlingScriptHelper scriptHelper = bindings.getSling();
+        return scriptHelper.getService(ConfigurationResourceResolver.class);
+    }
 
-	/**
-	 * Gets the variable name to which to save the list of children.
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+    /**
+     * Gets the variable name to which to save the list of children.
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
 
-	/**
-	 * @param bucket
-	 *            the bucket to set
-	 */
-	public void setBucket(String bucket) {
-		this.bucket = bucket;
-	}
+    /**
+     * @param bucket the bucket to set
+     */
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
+    }
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * @param resource
-	 *            the resource to set
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    /**
+     * @param resource the resource to set
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-	/**
-	 * Sets the variable name to which to save the list of children.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Sets the variable name to which to save the list of children.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 }

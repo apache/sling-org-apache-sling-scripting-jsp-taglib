@@ -30,163 +30,155 @@ import org.slf4j.LoggerFactory;
  */
 public class GetPropertyTag extends TagSupport {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(GetPropertyTag.class);
-	private static final long serialVersionUID = -1945089681840552408L;
-	private ValueMap properties;
-	private String key;
-	private Object defaultValue;
-	private String returnClass;
-	private String var;
+    private static final Logger log = LoggerFactory.getLogger(GetPropertyTag.class);
+    private static final long serialVersionUID = -1945089681840552408L;
+    private transient ValueMap properties;
+    private String key;
+    private transient Object defaultValue;
+    private String returnClass;
+    private String var;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-	 */
-	@Override
-	public int doEndTag() {
-		log.trace("doEndTag");
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
+     */
+    @Override
+    public int doEndTag() {
+        log.trace("doEndTag");
 
-		Object value = null;
-		if(properties != null){
-			if (this.defaultValue != null) {
-				value = properties.get(key, defaultValue);
-			} else if (returnClass != null && returnClass.trim().length() != 0) {
-				ClassLoader classLoader = getClassLoader();
-				
-				log.debug("Returning value as type: " + returnClass);
-				try {
-					Class<?> clazz = classLoader.loadClass(returnClass);
-					value = properties.get(key, clazz);
-				} catch (ClassNotFoundException cnfe) {
-					log.warn("Unable to find class: " + returnClass, cnfe);
-				}
-			} else {
-				value = properties.get(key);
-			}
-		}else{
-			if (this.defaultValue != null) {
-				value = defaultValue;
-			}
-		}
+        Object value = null;
+        if (properties != null) {
+            if (this.defaultValue != null) {
+                value = properties.get(key, defaultValue);
+            } else if (returnClass != null && returnClass.trim().length() != 0) {
+                ClassLoader classLoader = getClassLoader();
 
-		log.debug("Saving " + value + " to variable " + var);
-		pageContext.setAttribute(var, value);
+                log.debug("Returning value as type: {}", returnClass);
+                try {
+                    Class<?> clazz = classLoader.loadClass(returnClass);
+                    value = properties.get(key, clazz);
+                } catch (ClassNotFoundException cnfe) {
+                    log.warn("Unable to find class: " + returnClass, cnfe);
+                }
+            } else {
+                value = properties.get(key);
+            }
+        } else {
+            if (this.defaultValue != null) {
+                value = defaultValue;
+            }
+        }
 
-		return EVAL_PAGE;
-	}
+        log.debug("Saving {} to variable {}", value, var);
+        pageContext.setAttribute(var, value);
 
-	/**
-	 * Method for retrieving the classloader from the OSGi console.
-	 * 
-	 * @return the classloader
-	 */
-	protected ClassLoader getClassLoader() {
-		final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
-				.getAttribute(SlingBindings.class.getName());
-		final SlingScriptHelper scriptHelper = bindings.getSling();
-		final DynamicClassLoaderManager dynamicClassLoaderManager = scriptHelper
-				.getService(DynamicClassLoaderManager.class);
-		final ClassLoader classLoader = dynamicClassLoaderManager
-				.getDynamicClassLoader();
-		return classLoader;
-	}
+        return EVAL_PAGE;
+    }
 
-	/**
-	 * Gets the default value to return if no value exists for the key. If
-	 * specified, this takes precedence over returnClass.
-	 * 
-	 * @return the default value
-	 */
-	public Object getDefaultValue() {
-		return defaultValue;
-	}
+    /**
+     * Method for retrieving the classloader from the OSGi console.
+     * 
+     * @return the classloader
+     */
+    protected ClassLoader getClassLoader() {
+        final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
+                .getAttribute(SlingBindings.class.getName());
+        final SlingScriptHelper scriptHelper = bindings.getSling();
+        final DynamicClassLoaderManager dynamicClassLoaderManager = scriptHelper
+                .getService(DynamicClassLoaderManager.class);
+        return dynamicClassLoaderManager.getDynamicClassLoader();
+    }
 
-	/**
-	 * Gets key to retrieve the value from from the ValueMap.
-	 * 
-	 * @return the key
-	 */
-	public String getKey() {
-		return key;
-	}
+    /**
+     * Gets the default value to return if no value exists for the key. If
+     * specified, this takes precedence over returnClass.
+     * 
+     * @return the default value
+     */
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
 
-	/**
-	 * Gets the ValueMap from which to retrieve the value.
-	 * 
-	 * @return the ValueMap of properties
-	 */
-	public ValueMap getProperties() {
-		return properties;
-	}
+    /**
+     * Gets key to retrieve the value from from the ValueMap.
+     * 
+     * @return the key
+     */
+    public String getKey() {
+        return key;
+    }
 
-	/**
-	 * Gets the name of class into which to coerce the returned value.
-	 * 
-	 * @return the class name
-	 */
-	public String getReturnClass() {
-		return returnClass;
-	}
+    /**
+     * Gets the ValueMap from which to retrieve the value.
+     * 
+     * @return the ValueMap of properties
+     */
+    public ValueMap getProperties() {
+        return properties;
+    }
 
-	/**
-	 * Gets the variable name to which to save the value
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+    /**
+     * Gets the name of class into which to coerce the returned value.
+     * 
+     * @return the class name
+     */
+    public String getReturnClass() {
+        return returnClass;
+    }
 
-	/**
-	 * Sets the default value to return if no value exists for the key. If
-	 * specified, this takes precedence over returnClass.
-	 * 
-	 * @param defaultValue
-	 *            the default value
-	 */
-	public void setDefaultValue(Object defaultValue) {
-		this.defaultValue = defaultValue;
-	}
+    /**
+     * Gets the variable name to which to save the value
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
 
-	/**
-	 * Sets the key to retrieve the value from from the ValueMap.
-	 * 
-	 * @param key
-	 *            the key
-	 */
-	public void setKey(String key) {
-		this.key = key;
-	}
+    /**
+     * Sets the default value to return if no value exists for the key. If
+     * specified, this takes precedence over returnClass.
+     * 
+     * @param defaultValue the default value
+     */
+    public void setDefaultValue(Object defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 
-	/**
-	 * Sets the ValueMap from which to retrieve the value.
-	 * 
-	 * @param properties
-	 *            the ValueMap of properties
-	 */
-	public void setProperties(ValueMap properties) {
-		this.properties = properties;
-	}
+    /**
+     * Sets the key to retrieve the value from from the ValueMap.
+     * 
+     * @param key the key
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-	/**
-	 * Sets the name of class into which to coerce the returned value.
-	 * 
-	 * @param returnClass
-	 *            the class name
-	 */
-	public void setReturnClass(String returnClass) {
-		this.returnClass = returnClass;
-	}
+    /**
+     * Sets the ValueMap from which to retrieve the value.
+     * 
+     * @param properties the ValueMap of properties
+     */
+    public void setProperties(ValueMap properties) {
+        this.properties = properties;
+    }
 
-	/**
-	 * Sets the variable name to which to save the value.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Sets the name of class into which to coerce the returned value.
+     * 
+     * @param returnClass the class name
+     */
+    public void setReturnClass(String returnClass) {
+        this.returnClass = returnClass;
+    }
+
+    /**
+     * Sets the variable name to which to save the value.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 }

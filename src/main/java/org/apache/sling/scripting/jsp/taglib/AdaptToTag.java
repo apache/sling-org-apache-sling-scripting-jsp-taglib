@@ -30,114 +30,108 @@ import org.slf4j.LoggerFactory;
  */
 public class AdaptToTag extends TagSupport {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(AdaptToTag.class);
-	private static final long serialVersionUID = -1945089681840552408L;
-	private Adaptable adaptable;
-	private String adaptTo;
-	private String var;
+    private static final Logger log = LoggerFactory.getLogger(AdaptToTag.class);
+    private static final long serialVersionUID = -1945089681840552408L;
+    private transient Adaptable adaptable;
+    private String adaptTo;
+    private String var;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-	 */
-	@Override
-	public int doEndTag() {
-		log.trace("doEndTag");
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
+     */
+    @Override
+    public int doEndTag() {
+        log.trace("doEndTag");
 
-		ClassLoader classLoader = getClassLoader();
-		log.debug("Adapting adaptable " + adaptable + " to class " + adaptTo);
+        ClassLoader classLoader = getClassLoader();
+        log.debug("Adapting adaptable {} t class {}", adaptable, adaptTo);
 
-		if (adaptable != null) {
-			Object adapted = null;
-			try {
-				Class<?> adaptToClass = classLoader.loadClass(adaptTo);
-				adapted = adaptable.adaptTo(adaptToClass);
-			} catch (ClassNotFoundException e) {
-				log.warn("Unable to retrieve class " + adaptTo, e);
-			}
+        if (adaptable != null) {
+            Object adapted = null;
+            try {
+                Class<?> adaptToClass = classLoader.loadClass(adaptTo);
+                adapted = adaptable.adaptTo(adaptToClass);
+            } catch (ClassNotFoundException e) {
+                log.warn("Unable to retrieve class " + adaptTo, e);
+            }
 
-			log.debug("Saving " + adapted + " to variable " + var);
-			pageContext.setAttribute(var, adapted);
-		} else {
-			log.debug("Null adaptable specified");
-		}
+            log.debug("Saving {} to variable {}",adapted, var);
+            pageContext.setAttribute(var, adapted);
+        } else {
+            log.debug("Null adaptable specified");
+        }
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 
-	/**
-	 * Get the adaptable object to be adapted.
-	 * 
-	 * @return the adaptable
-	 */
-	public Adaptable getAdaptable() {
-		return adaptable;
-	}
+    /**
+     * Get the adaptable object to be adapted.
+     * 
+     * @return the adaptable
+     */
+    public Adaptable getAdaptable() {
+        return adaptable;
+    }
 
-	/**
-	 * Gets the class name to adapt the adaptable to.
-	 * 
-	 * @return the class to adapt to
-	 */
-	public String getAdaptTo() {
-		return adaptTo;
-	}
+    /**
+     * Gets the class name to adapt the adaptable to.
+     * 
+     * @return the class to adapt to
+     */
+    public String getAdaptTo() {
+        return adaptTo;
+    }
 
-	/**
-	 * Method for retrieving the classloader from the OSGi console.
-	 * 
-	 * @return the classloader
-	 */
-	protected ClassLoader getClassLoader() {
-		final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
-				.getAttribute(SlingBindings.class.getName());
-		final SlingScriptHelper scriptHelper = bindings.getSling();
-		final DynamicClassLoaderManager dynamicClassLoaderManager = scriptHelper
-				.getService(DynamicClassLoaderManager.class);
-		final ClassLoader classLoader = dynamicClassLoaderManager
-				.getDynamicClassLoader();
-		return classLoader;
-	}
+    /**
+     * Method for retrieving the classloader from the OSGi console.
+     * 
+     * @return the classloader
+     */
+    protected ClassLoader getClassLoader() {
+        final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
+                .getAttribute(SlingBindings.class.getName());
+        final SlingScriptHelper scriptHelper = bindings.getSling();
+        final DynamicClassLoaderManager dynamicClassLoaderManager = scriptHelper
+                .getService(DynamicClassLoaderManager.class);
+        return dynamicClassLoaderManager.getDynamicClassLoader();
+    }
 
-	/**
-	 * Gets the variable name to save the resulting object to.
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+    /**
+     * Gets the variable name to save the resulting object to.
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
 
-	/**
-	 * Sets the adaptable object to be adapted.
-	 * 
-	 * @param adaptable
-	 *            the object to adapt
-	 */
-	public void setAdaptable(Adaptable adaptable) {
-		this.adaptable = adaptable;
-	}
+    /**
+     * Sets the adaptable object to be adapted.
+     * 
+     * @param adaptable the object to adapt
+     */
+    public void setAdaptable(Adaptable adaptable) {
+        this.adaptable = adaptable;
+    }
 
-	/**
-	 * Sets the class name to adapt the adaptable to.
-	 * 
-	 * @param adaptTo
-	 *            the class to adapt to
-	 */
-	public void setAdaptTo(String adaptTo) {
-		this.adaptTo = adaptTo;
-	}
+    /**
+     * Sets the class name to adapt the adaptable to.
+     * 
+     * @param adaptTo the class to adapt to
+     */
+    public void setAdaptTo(String adaptTo) {
+        this.adaptTo = adaptTo;
+    }
 
-	/**
-	 * Gets the variable name to save the resulting object to.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Gets the variable name to save the resulting object to.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 
 }

@@ -33,115 +33,109 @@ import org.slf4j.LoggerFactory;
  */
 public class EncodeTag extends BodyTagSupport {
 
-	private static final long serialVersionUID = 5673936481350419997L;
+    private static final long serialVersionUID = 5673936481350419997L;
 
-	private static final Logger log = LoggerFactory.getLogger(EncodeTag.class);
-	private String value;
-	private String defaultValue;
-	private ENCODING_MODE mode;
-	private boolean readBody = false;
+    private static final Logger log = LoggerFactory.getLogger(EncodeTag.class);
+    private String value;
+    private String defaultValue;
+    private ENCODING_MODE mode;
+    private boolean readBody = false;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-	 */
-	@Override
-	public int doEndTag() throws JspException {
-		log.trace("doEndTag");
+    /*
+     * (non-Javadoc)
+     *
+     * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
+     */
+    @Override
+    public int doEndTag() throws JspException {
+        log.trace("doEndTag");
 
-		if (readBody) {
-			if (bodyContent != null && bodyContent.getString() != null) {
-				String encoded = XSSSupport.encode(bodyContent.getString(), mode);
-				write(encoded);
-			}
-		}
-		return EVAL_PAGE;
-	}
+        if (readBody && bodyContent != null && bodyContent.getString() != null) {
+            String encoded = XSSSupport.encode(bodyContent.getString(), mode);
+            write(encoded);
+        }
+        return EVAL_PAGE;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see javax.servlet.jsp.tagext.BodyTagSupport#doStartTag()
-	 */
-	@Override
-	public int doStartTag() throws JspException {
-		int res = SKIP_BODY;
-		String unencoded = value;
-		if (StringUtils.isBlank(unencoded)) {
-			unencoded = defaultValue;
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see javax.servlet.jsp.tagext.BodyTagSupport#doStartTag()
+     */
+    @Override
+    public int doStartTag() throws JspException {
+        int res = SKIP_BODY;
+        String unencoded = value;
+        if (StringUtils.isBlank(unencoded)) {
+            unencoded = defaultValue;
+        }
 
-		if (unencoded != null) {
-			String encoded = XSSSupport.encode(unencoded, mode);
-			write(encoded);
-		} else {
-			readBody = true;
-			res = EVAL_BODY_BUFFERED;
-		}
-		return res;
-	}
+        if (unencoded != null) {
+            String encoded = XSSSupport.encode(unencoded, mode);
+            write(encoded);
+        } else {
+            readBody = true;
+            res = EVAL_BODY_BUFFERED;
+        }
+        return res;
+    }
 
-	/**
-	 * @return the default value
-	 */
-	public String getDefault() {
-		return defaultValue;
-	}
+    /**
+     * @return the default value
+     */
+    public String getDefault() {
+        return defaultValue;
+    }
 
-	/**
-	 * @return the mode
-	 */
-	public String getMode() {
-		return mode.toString();
-	}
+    /**
+     * @return the mode
+     */
+    public String getMode() {
+        return mode.toString();
+    }
 
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
 
-	/**
-	 * @param defaultValue
-	 *            the default value to set
-	 */
-	public void setDefault(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
+    /**
+     * @param defaultValue the default value to set
+     */
+    public void setDefault(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 
-	/**
-	 * @param mode
-	 *            the mode to set
-	 */
-	public void setMode(String mode) {
-		this.mode = XSSSupport.getEncodingMode(mode);
-	}
+    /**
+     * @param mode the mode to set
+     */
+    public void setMode(String mode) {
+        this.mode = XSSSupport.getEncodingMode(mode);
+    }
 
-	/**
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	/**
-	 * Writes the encoded text to the response.
-	 *
-	 * @param encoded
-	 *            the encoded text to write to the page
-	 * @throws JspException
-	 */
-	private void write(String encoded) throws JspException {
-		if (encoded != null && !encoded.isEmpty()) {
-			try {
-				pageContext.getOut().write(encoded);
-			} catch (IOException e) {
-				log.error("Exception writing escaped content to page", e);
-				throw new JspException("Exception writing escaped content to page", e);
-			}
-		}
-	}
+    /**
+     * Writes the encoded text to the response.
+     *
+     * @param encoded the encoded text to write to the page
+     * @throws JspException
+     */
+    private void write(String encoded) throws JspException {
+        if (encoded != null && !encoded.isEmpty()) {
+            try {
+                pageContext.getOut().write(encoded);
+            } catch (IOException e) {
+                log.error("Exception writing escaped content to page", e);
+                throw new JspException("Exception writing escaped content to page", e);
+            }
+        }
+    }
 }

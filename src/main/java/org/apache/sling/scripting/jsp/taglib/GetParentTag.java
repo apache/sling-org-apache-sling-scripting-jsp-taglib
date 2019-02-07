@@ -30,98 +30,99 @@ import org.slf4j.LoggerFactory;
  */
 public class GetParentTag extends TagSupport {
 
-	/** The Constant log. */
-	private static final Logger log = LoggerFactory.getLogger(GetParentTag.class);
+    /** The Constant log. */
+    private static final Logger log = LoggerFactory.getLogger(GetParentTag.class);
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -3419869755342010983L;
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = -3419869755342010983L;
 
-	/** The current resource. */
-	private Resource resource;
+    /** The current resource. */
+    private transient Resource resource;
 
-	/** The level. */
-	private String level;
+    /** The level. */
+    private String level;
 
-	/** The var. */
-	private String var;
+    /** The var. */
+    private String var;
 
-	@Override
-	public int doEndTag() {
-		log.trace("doEndTag");
+    @Override
+    public int doEndTag() {
+        log.trace("doEndTag");
 
-		Resource parent = null;
+        Resource parent = null;
 
-		if (level != null) {
-			String[] segments = resource.getPath().split("\\/");
-			int end = Integer.parseInt(level, 10);
-			String parentPath = "/"+StringUtils.join(Arrays.copyOfRange(segments, 1, end + 1), "/");
-			log.debug("Retrieving {} parent resource at path {}", level, parentPath);
-			parent = resource.getResourceResolver().getResource(parentPath);
-		} else {
-			log.debug("Retrieving parent resource");
-			parent = resource.getParent();
-		}
+        if (resource != null) {
+            if (level != null) {
+                if (resource.getPath() != null) {
+                    String[] segments = resource.getPath().split("\\/");
+                    int end = Integer.parseInt(level, 10);
+                    String parentPath = "/" + StringUtils.join(Arrays.copyOfRange(segments, 1, end + 1), "/");
+                    log.debug("Retrieving {} parent resource at path {}", level, parentPath);
+                    parent = resource.getResourceResolver().getResource(parentPath);
+                }
+            } else {
+                log.debug("Retrieving parent resource");
+                parent = resource.getParent();
+            }
+        }
 
-		log.debug("Saving {} to variable {}", parent, var);
-		pageContext.setAttribute(var, parent);
+        log.debug("Saving {} to variable {}", parent, var);
+        pageContext.setAttribute(var, parent);
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 
-	/**
-	 * Gets the resource.
-	 * 
-	 * @return the resource
-	 */
-	public Resource getResource() {
-		return resource;
-	}
-	
-	/**
-	 * Get the level of the parent resource to retrieve.
-	 * 
-	 * @return the level
-	 */
-	public String getLevel() {
-		return level;
-	}
+    /**
+     * Gets the resource.
+     * 
+     * @return the resource
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
-	/**
-	 * Gets the variable name to which to save the list of children.
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+    /**
+     * Get the level of the parent resource to retrieve.
+     * 
+     * @return the level
+     */
+    public String getLevel() {
+        return level;
+    }
 
-	/**
-	 * Sets the resource.
-	 * 
-	 * @param resource
-	 *            the new resource
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    /**
+     * Gets the variable name to which to save the list of children.
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
 
-	/**
-	 * Set the level of the parent resource to retrieve.
-	 * 
-	 * @param level
-	 *            the level
-	 */
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    /**
+     * Sets the resource.
+     * 
+     * @param resource the new resource
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-	/**
-	 * Sets the variable name to which to save the parent resource.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Set the level of the parent resource to retrieve.
+     * 
+     * @param level the level
+     */
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    /**
+     * Sets the variable name to which to save the parent resource.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 }

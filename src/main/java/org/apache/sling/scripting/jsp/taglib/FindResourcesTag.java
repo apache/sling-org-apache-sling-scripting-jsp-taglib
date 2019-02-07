@@ -22,8 +22,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,110 +31,92 @@ import org.slf4j.LoggerFactory;
  */
 public class FindResourcesTag extends TagSupport {
 
-	/** The Constant log. */
-	private static final Logger log = LoggerFactory
-			.getLogger(FindResourcesTag.class);
-	
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 8717969268407440925L;
-	
-	/** The query. */
-	private String query;
-	
-	/** The language. */
-	private String language;
-	
-	/** The var. */
-	private String var;
+    /** The Constant log. */
+    private static final Logger log = LoggerFactory.getLogger(FindResourcesTag.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-	 */
-	@Override
-	public int doEndTag() {
-		log.trace("doEndTag");
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 8717969268407440925L;
 
-		log.debug("Finding resources using query: {} of language {}", query,
-				language);
+    /** The query. */
+    private String query;
 
-		ResourceResolver resolver = getResourceResolver();
-		final Iterator<Resource> resources = resolver.findResources(query,
-				language);
-		
-		log.debug("Saving resources to variable {}", var);
-		pageContext.setAttribute(var, resources);
+    /** The language. */
+    private String language;
 
-		return EVAL_PAGE;
-	}
+    /** The var. */
+    private String var;
 
-	/**
-	 * Gets the language.
-	 *
-	 * @return the language
-	 */
-	public String getLanguage() {
-		return language;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
+     */
+    @Override
+    public int doEndTag() {
+        log.trace("doEndTag");
 
-	/**
-	 * Gets the query.
-	 *
-	 * @return the query
-	 */
-	public String getQuery() {
-		return query;
-	}
+        log.debug("Finding resources using query: {} of language {}", query, language);
 
-	/**
-	 * Method for retrieving the ResourceResolver from the page context.
-	 * 
-	 * @return the resource resolver
-	 */
-	protected ResourceResolver getResourceResolver() {
-		final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
-				.getAttribute(SlingBindings.class.getName());
-		final SlingScriptHelper scriptHelper = bindings.getSling();
-		final ResourceResolver resolver = scriptHelper.getRequest()
-				.getResourceResolver();
-		return resolver;
-	}
+        ResourceResolver resolver = SlingFunctions.getResourceResolver(pageContext);
+        final Iterator<Resource> resources = resolver.findResources(query, language);
 
-	/**
-	 * Gets the variable name to which to save the list of children.
-	 * 
-	 * @return the variable name
-	 */
-	public String getVar() {
-		return var;
-	}
+        log.debug("Saving resources to variable {}", var);
+        pageContext.setAttribute(var, resources);
 
-	/**
-	 * Sets the language.
-	 *
-	 * @param language the new language
-	 */
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+        return EVAL_PAGE;
+    }
 
-	/**
-	 * Sets the query.
-	 *
-	 * @param query the new query
-	 */
-	public void setQuery(String query) {
-		this.query = query;
-	}
+    /**
+     * Gets the language.
+     *
+     * @return the language
+     */
+    public String getLanguage() {
+        return language;
+    }
 
-	/**
-	 * Sets the variable name to which to save the list of children.
-	 * 
-	 * @param var
-	 *            the variable name
-	 */
-	public void setVar(String var) {
-		this.var = var;
-	}
+    /**
+     * Gets the query.
+     *
+     * @return the query
+     */
+    public String getQuery() {
+        return query;
+    }
+
+    /**
+     * Gets the variable name to which to save the list of children.
+     * 
+     * @return the variable name
+     */
+    public String getVar() {
+        return var;
+    }
+
+    /**
+     * Sets the language.
+     *
+     * @param language the new language
+     */
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    /**
+     * Sets the query.
+     *
+     * @param query the new query
+     */
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    /**
+     * Sets the variable name to which to save the list of children.
+     * 
+     * @param var the variable name
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
 }

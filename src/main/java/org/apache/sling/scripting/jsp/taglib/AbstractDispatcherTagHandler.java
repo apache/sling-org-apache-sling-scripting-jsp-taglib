@@ -51,7 +51,7 @@ public abstract class AbstractDispatcherTagHandler extends TagSupport {
     private static final Logger log = LoggerFactory.getLogger(AbstractDispatcherTagHandler.class);
 
     /** resource argument */
-    private Resource resource;
+    private transient Resource resource;
 
     /** path argument */
     private String path;
@@ -73,6 +73,7 @@ public abstract class AbstractDispatcherTagHandler extends TagSupport {
      *
      * @return whether additional evaluations of the body are desired
      */
+    @Override
     public int doEndTag() throws JspException {
         log.debug("AbstractDispatcherTagHandler.doEndTag");
 
@@ -104,8 +105,7 @@ public abstract class AbstractDispatcherTagHandler extends TagSupport {
                 // check whether the path (would) resolve, else SyntheticRes.
                 Resource tmp = request.getResourceResolver().resolve(path);
                 if (tmp == null && resourceType != null) {
-                    resource = new DispatcherSyntheticResource(
-                        request.getResourceResolver(), path, resourceType);
+                    resource = new DispatcherSyntheticResource(request.getResourceResolver(), path, resourceType);
 
                     // remove resource type overwrite as synthetic resource
                     // is correctly typed as requested
@@ -124,8 +124,7 @@ public abstract class AbstractDispatcherTagHandler extends TagSupport {
             }
 
             if (dispatcher != null) {
-                SlingHttpServletResponse response = new JspSlingHttpServletResponseWrapper(
-                    pageContext);
+                SlingHttpServletResponse response = new JspSlingHttpServletResponseWrapper(pageContext);
                 dispatch(dispatcher, request, response);
             } else {
                 TagUtil.log(log, pageContext, "No content to include...", null);
@@ -142,17 +141,17 @@ public abstract class AbstractDispatcherTagHandler extends TagSupport {
         return EVAL_PAGE;
     }
 
-    protected abstract void dispatch(RequestDispatcher dispatcher,
-            ServletRequest request, ServletResponse response)
+    protected abstract void dispatch(RequestDispatcher dispatcher, ServletRequest request, ServletResponse response)
             throws IOException, ServletException, JspTagException;
 
+    @Override
     public void setPageContext(PageContext pageContext) {
         super.setPageContext(pageContext);
-		clear();
+        clear();
     }
 
     public void setResource(final Resource rsrc) {
-        if ( rsrc == null ) {
+        if (rsrc == null) {
             throw new NullPointerException("Resource should not be null.");
         }
         this.resource = rsrc;
@@ -186,15 +185,13 @@ public abstract class AbstractDispatcherTagHandler extends TagSupport {
      */
     private static class DispatcherSyntheticResource extends SyntheticResource {
 
-        public DispatcherSyntheticResource(ResourceResolver resourceResolver,
-                String path, String resourceType) {
+        public DispatcherSyntheticResource(ResourceResolver resourceResolver, String path, String resourceType) {
             super(resourceResolver, path, resourceType);
         }
 
         @Override
         public String getResourceSuperType() {
-            return ResourceUtil.getResourceSuperType(getResourceResolver(),
-                getResourceType());
+            return ResourceUtil.getResourceSuperType(getResourceResolver(), getResourceType());
         }
     }
 

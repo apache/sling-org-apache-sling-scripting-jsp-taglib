@@ -46,7 +46,7 @@ public class EvalTagHandler extends TagSupport {
     private static final Logger log = LoggerFactory.getLogger(EvalTagHandler.class);
 
     /** resource argument */
-    private Resource resource;
+    private transient Resource resource;
 
     /** script argument */
     private String script;
@@ -60,33 +60,33 @@ public class EvalTagHandler extends TagSupport {
     /** flush argument */
     private boolean flush = false;
 
-
     /**
      * Called after the body has been processed.
      *
      * @return whether additional evaluations of the body are desired
      */
+    @Override
     public int doEndTag() throws JspException {
         log.debug("EvalTagHandler doEndTag");
 
-        final SlingBindings bindings = (SlingBindings) pageContext.getRequest().getAttribute(
-                SlingBindings.class.getName());
+        final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
+                .getAttribute(SlingBindings.class.getName());
         final SlingScriptHelper scriptHelper = bindings.getSling();
         final ServletResolver servletResolver = scriptHelper.getService(ServletResolver.class);
 
         final Servlet servlet;
-        if ( !this.ignoreResourceTypeHierarchy ) {
+        if (!this.ignoreResourceTypeHierarchy) {
             // detecte resource
-            final Resource resource;
-            if ( this.resource != null ) {
-                resource = this.resource;
-            } else if ( this.resourceType != null ) {
-                resource = new SyntheticResource(bindings.getRequest().getResourceResolver(),
+            final Resource evalResource;
+            if (this.resource != null) {
+                evalResource = this.resource;
+            } else if (this.resourceType != null) {
+                evalResource = new SyntheticResource(bindings.getRequest().getResourceResolver(),
                         bindings.getResource().getPath(), this.resourceType);
             } else {
-                resource = bindings.getResource();
+                evalResource = bindings.getResource();
             }
-            servlet = servletResolver.resolveServlet(resource, this.script);
+            servlet = servletResolver.resolveServlet(evalResource, this.script);
         } else {
             final ResourceResolver rr = bindings.getRequest().getResourceResolver();
             final String scriptPath;
@@ -95,7 +95,7 @@ public class EvalTagHandler extends TagSupport {
                 // resolve relative script
                 String parentPath = ResourceUtil.getParent(scriptHelper.getScript().getScriptResource().getPath());
                 // check if parent resides on search path
-                for (String sp: rr.getSearchPath()) {
+                for (String sp : rr.getSearchPath()) {
                     if (parentPath.startsWith(sp)) {
                         parentPath = parentPath.substring(sp.length());
                         break;
@@ -111,7 +111,8 @@ public class EvalTagHandler extends TagSupport {
         }
 
         if (servlet == null) {
-            throw new JspException("Could not find script '" + script + "' referenced in jsp " + scriptHelper.getScript().getScriptResource().getPath());
+            throw new JspException("Could not find script '" + script + "' referenced in jsp "
+                    + scriptHelper.getScript().getScriptResource().getPath());
         }
 
         try {
@@ -121,8 +122,7 @@ public class EvalTagHandler extends TagSupport {
             }
 
             // wrap the response to get the correct output order
-            SlingHttpServletResponse response = new JspSlingHttpServletResponseWrapper(
-                pageContext);
+            SlingHttpServletResponse response = new JspSlingHttpServletResponseWrapper(pageContext);
 
             servlet.service(pageContext.getRequest(), response);
 
@@ -138,6 +138,7 @@ public class EvalTagHandler extends TagSupport {
     /**
      * @see javax.servlet.jsp.tagext.TagSupport#setPageContext(javax.servlet.jsp.PageContext)
      */
+    @Override
     public void setPageContext(final PageContext pageContext) {
         super.setPageContext(pageContext);
 
