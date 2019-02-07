@@ -23,9 +23,9 @@ import java.util.Iterator;
 
 public class ResourceIteratorVariableTEI extends AbstractVarTEI {
 
-    private static String ITERATOR_CLASS_NAME = Iterator.class.getName();
-    private static String RESOURCE_CLASS_NAME = Resource.class.getName();
-    private static String RESOURCE_ITERATOR_CLASS_NAME = ITERATOR_CLASS_NAME + '<' + RESOURCE_CLASS_NAME + '>';
+    private static final String ITERATOR_CLASS_NAME = Iterator.class.getName();
+    private static final String RESOURCE_CLASS_NAME = Resource.class.getName();
+    private static final String RESOURCE_ITERATOR_CLASS_NAME = ITERATOR_CLASS_NAME + '<' + RESOURCE_CLASS_NAME + '>';
 
     @Override
     protected String getClassName(TagData data) {
