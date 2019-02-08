@@ -16,56 +16,75 @@
  */
 package org.apache.sling.scripting.jsp.taglib.helpers;
 
-import org.owasp.esapi.ESAPI;
+import org.apache.sling.xss.XSSAPI;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * Support for basic XSS protection as provided by the OWASP ESAPI's escape
  * methods.
+ * 
+ * <p>Note that this class is an OSGi component only to make sure it can get a reference to the
+ * {@link XSSAPI} correctly. Its usage is intended to be only within this bundle. For all other usages,
+ * directly accessing the {@link XSSAPI} service is strongly recommended.</p>
  */
+@Component
 public class XSSSupport {
-
-    /**
-     * The encoding modes supported by this tag.
-     */
-    public enum ENCODING_MODE {
-        /**
-         * Encodes the content as HTML
-         */
-        HTML, HTML_ATTR, JS, XML, XML_ATTR
+    
+    @Reference
+    private XSSAPI xssApi;
+    
+    private static volatile XSSAPI XSS_API;
+    
+    protected void activate() {
+        XSS_API = xssApi;
+    }
+    
+    protected void deactivate() {
+        XSS_API = null;
     }
 
-    /**
-     * Encodes the unencoded string using the specified mode. This will be deferred
-     * to the corresponding OWASP ESAPI encoding method.
-     *
-     * @param unencoded the unencoded string
-     * @param mode      the mode with which to encode the string
-     * @return the encoded string
-     */
-    public static String encode(String unencoded, ENCODING_MODE mode) {
+	/**
+	 * The encoding modes supported by this tag.
+	 */
+	public enum ENCODING_MODE {
+		/**
+		 * Encodes the content as HTML
+		 */
+		HTML, HTML_ATTR, XML, XML_ATTR, JS
+	}
+	
+	/**
+	 * Encodes the unencoded string using the specified mode. This will be
+	 * deferred to the corresponding OWASP ESAPI encoding method.
+	 *
+	 * @param unencoded
+	 *            the unencoded string
+	 * @param mode
+	 *            the mode with which to encode the string
+	 * @return the encoded string
+	 * @deprecated since bundle version 2.4.0. Use the {@link #encodeString(String, ENCODING_MODE)} method instead.
+	 */
+	@Deprecated
+	public static String encode(String unencoded, ENCODING_MODE mode) {
 
-        String encoded = null;
-        switch (mode) {
+	    if ( XSS_API == null )
+	        throw new IllegalStateException("No XSS_API field set. Is the XSSAPI service available?");
+	    switch ( mode ) {
         case HTML:
-            encoded = ESAPI.encoder().encodeForHTML(unencoded);
-            break;
+            return XSS_API.encodeForHTML(unencoded);
         case HTML_ATTR:
-            encoded = ESAPI.encoder().encodeForHTMLAttribute(unencoded);
-            break;
+            return XSS_API.encodeForHTMLAttr(unencoded);
         case XML:
-            encoded = ESAPI.encoder().encodeForXML(unencoded);
-            break;
+            return XSS_API.encodeForXML(unencoded);
         case XML_ATTR:
-            encoded = ESAPI.encoder().encodeForXMLAttribute(unencoded);
-            break;
+            return XSS_API.encodeForHTMLAttr(unencoded);
         case JS:
-            encoded = ESAPI.encoder().encodeForJavaScript(unencoded);
-            break;
-        default:
-            break;
+            return XSS_API.encodeForJSString(unencoded);
+            default:
+                return unencoded;
         }
-        return encoded;
-    }
+	}
 
     /**
      * Retrieves the encoding mode associated with the specified string. Will throw

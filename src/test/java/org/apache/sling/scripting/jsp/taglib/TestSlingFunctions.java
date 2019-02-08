@@ -22,17 +22,21 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+
+import javax.jcr.Session;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.commons.testing.sling.MockResource;
-import org.apache.sling.commons.testing.sling.MockResourceResolver;
+import org.apache.sling.testing.mock.jcr.MockJcr;
+import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +50,13 @@ public class TestSlingFunctions {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestGetResourceTag.class);
-	private MockResource resource;
-	private MockResourceResolver resolver;
+    
+	@Rule
+    public XSSSupportRule xssSupportRule = new XSSSupportRule();
+	@Rule
+    public final SlingContext ctx = new SlingContext(ResourceResolverType.JCR_MOCK);
+    private ResourceResolver resolver;
+	private Resource resource;
 	private Date date;
 	private static final String TEST_PATH = "/content";
 
@@ -58,31 +67,18 @@ public class TestSlingFunctions {
 	public void init() {
 		log.info("init");
 
-		resolver = new MockResourceResolver() {
-			@Override
-			public Iterator<Resource> findResources(String query,
-					String language) {
-				if (query.equals("query") && language.equals("language")) {
-					List<Resource> resources = new ArrayList<Resource>();
-					resources.add(resource);
-					return resources.iterator();
-				} else {
-					return null;
-				}
-			}
-		};
-		resource = new MockResource(resolver, TEST_PATH, "test");
 		this.date = new Date();
-		resource.addProperty("date", date);
-		resource.addProperty("long", new Long(0L));
-		resolver.addResource(resource);
-		MockResource child1 = new MockResource(resolver, TEST_PATH + "/child1",
-				"test");
-		resolver.addResource(child1);
-		MockResource child2 = new MockResource(resolver, TEST_PATH + "/child2",
-				"test");
-		resolver.addResource(child2);
-
+		
+		ctx.build()
+		    .resource("/")
+		    .resource(TEST_PATH, "date", date, "long", new Long(0L))
+		    .resource(TEST_PATH +"/child1")
+		    .resource(TEST_PATH +"/child2");
+		
+		resource = ctx.resourceResolver().getResource(TEST_PATH);
+		resolver = ctx.resourceResolver();
+		MockJcr.setQueryResult(ctx.resourceResolver().adaptTo(Session.class), Arrays.asList(resource.adaptTo(javax.jcr.Node.class)));
+		
 		log.info("init Complete");
 	}
 
@@ -91,12 +87,12 @@ public class TestSlingFunctions {
 		log.info("testEncode");
 
 		log.info("Testing HTML Encoding");
-		assertEquals("&amp;nbsp&#x3b;Here is some text&#x21;",
+		assertEquals("&amp;nbsp;Here is some text!",
 				SlingFunctions.encode("&nbsp;Here is some text!", "HTML"));
 
 		log.info("Testing HTML Attr Encoding");
 		assertEquals(
-				"&amp;nbsp&#x3b;Here&#x20;is&#x20;some&#x20;text&#x21;&quot;",
+				"&amp;nbsp;Here is some text!&#34;",
 				SlingFunctions
 						.encode("&nbsp;Here is some text!\"", "HTML_ATTR"));
 
@@ -136,10 +132,10 @@ public class TestSlingFunctions {
 		log.info("testFindResources");
 
 		Iterator<Resource> resources = SlingFunctions.findResources(resolver,
-				"query", "language");
+				"query", "sql");
 		assertNotNull(resources);
 		assertTrue(resources.hasNext());
-		assertEquals(resource, resources.next());
+		assertEquals(resource.getPath(), resources.next().getPath());
 
 		log.info("Tests successful!");
 	}

@@ -20,11 +20,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.commons.testing.sling.MockResource;
-import org.apache.sling.commons.testing.sling.MockResourceResolver;
+import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +38,11 @@ import org.slf4j.LoggerFactory;
 public class TestAdaptObjectTag {
 
     private static final Logger log = LoggerFactory.getLogger(TestAdaptObjectTag.class);
+
+    @Rule
+    public final SlingContext context = new SlingContext();
     private AdaptToTag adaptToTag;
-    private MockResource resource;
+    private Resource resource;
     private MockPageContext pageContext;
     private static final String VAR_KEY = "properties";
 
@@ -57,9 +61,8 @@ public class TestAdaptObjectTag {
 
         pageContext = new MockPageContext();
         adaptToTag.setPageContext(pageContext);
-
-        ResourceResolver resolver = new MockResourceResolver();
-        resource = new MockResource(resolver, "/", "test");
+        context.build().resource("/", "sling:resourceType", "test");
+        resource = context.resourceResolver().getResource("/");
         log.info("init Complete");
     }
 

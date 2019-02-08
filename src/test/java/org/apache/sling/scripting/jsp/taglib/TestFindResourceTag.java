@@ -20,24 +20,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
+import javax.jcr.Session;
 import javax.servlet.ServletRequest;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.api.scripting.SlingScript;
-import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.commons.testing.sling.MockResource;
-import org.apache.sling.commons.testing.sling.MockResourceResolver;
-import org.apache.sling.commons.testing.sling.MockSlingHttpServletRequest;
+import org.apache.sling.testing.mock.jcr.MockJcr;
+import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +44,12 @@ import org.slf4j.LoggerFactory;
 public class TestFindResourceTag {
 
     private static final Logger log = LoggerFactory.getLogger(TestFindResourceTag.class);
+
+    @Rule
+    public final SlingContext ctx = new SlingContext(ResourceResolverType.JCR_MOCK);
     private FindResourcesTag findResourcesTag;
-    private MockResource resource;
+    private Resource resource;
     private MockPageContext pageContext;
-    private MockSlingHttpServletRequest request;
     private static final String VAR_KEY = "resource";
     private static final String TEST_PATH = "/content";
 
@@ -64,126 +60,16 @@ public class TestFindResourceTag {
     public void init() {
         log.info("init");
 
-        final MockResourceResolver resolver = new MockResourceResolver() {
-            @Override
-            public Iterator<Resource> findResources(String query, String language) {
-                if (query.equals("query") && language.equals("language")) {
-                    List<Resource> resources = new ArrayList<Resource>();
-                    resources.add(resource);
-                    return resources.iterator();
-                } else {
-                    return null;
-                }
-            }
-        };
-        resource = new MockResource(resolver, TEST_PATH, "test");
-        resolver.addResource(resource);
-
-        final SlingBindings bindings = new SlingBindings();
-        bindings.setSling(new SlingScriptHelper() {
-
-            @Override
-            public SlingHttpServletRequest getRequest() {
-                return request;
-            }
-
-            @Override
-            public SlingHttpServletResponse getResponse() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public SlingScript getScript() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void include(String path) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void include(String path, String requestDispatcherOptions) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void include(String path, RequestDispatcherOptions options) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void include(Resource resource) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void include(Resource resource, String requestDispatcherOptions) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void include(Resource resource, RequestDispatcherOptions options) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forward(String path) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forward(String path, String requestDispatcherOptions) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forward(String path, RequestDispatcherOptions options) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forward(Resource resource) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forward(Resource resource, String requestDispatcherOptions) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forward(Resource resource, RequestDispatcherOptions options) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public <ServiceType> ServiceType getService(Class<ServiceType> serviceType) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public <ServiceType> ServiceType[] getServices(Class<ServiceType> serviceType, String filter) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void dispose() {
-                throw new UnsupportedOperationException();
-            }
-        });
-        request = new MockSlingHttpServletRequest("/content", "", "html", "", "") {
-            public Object getAttribute(String name) {
-                return bindings;
-            }
-            public ResourceResolver getResourceResolver() {
-                return resolver;
-            }
-        };
+        ctx.build()
+            .resource("/")
+            .resource(TEST_PATH);
+        
+        resource = ctx.resourceResolver().getResource(TEST_PATH);
+        MockJcr.setQueryResult(ctx.resourceResolver().adaptTo(Session.class), Arrays.asList(resource.adaptTo(javax.jcr.Node.class)));
 
         pageContext = new MockPageContext() {
             public ServletRequest getRequest() {
-                return request;
+                return ctx.request();
             }
         };
         findResourcesTag = new FindResourcesTag();
@@ -201,7 +87,7 @@ public class TestFindResourceTag {
 
         findResourcesTag.setVar(VAR_KEY);
         findResourcesTag.setQuery("query");
-        findResourcesTag.setLanguage("language");
+        findResourcesTag.setLanguage("sql"); // must be something supported by the JCR provider
         findResourcesTag.doEndTag();
         Object result = pageContext.getAttribute(VAR_KEY);
         assertNotNull(result);
