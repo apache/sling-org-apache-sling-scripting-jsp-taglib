@@ -23,6 +23,10 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * Support for basic XSS protection as provided by the OWASP ESAPI's escape
  * methods.
+ * 
+ * <p>Note that this class is an OSGi component only to make sure it can get a reference to the
+ * {@link XSSAPI} correctly. Its usage is intended to be only within this bundle. For all other usages,
+ * directly accessing the {@link XSSAPI} service is strongly recommended.</p>
  */
 @Component
 public class XSSSupport {
@@ -49,38 +53,7 @@ public class XSSSupport {
 		 */
 		HTML, HTML_ATTR, XML, XML_ATTR, JS
 	}
-
-   /**
-     * Encodes the unencoded string using the specified mode. This will be
-     * deferred to the corresponding OWASP ESAPI encoding method.
-     *
-     * @param unencoded
-     *            the unencoded string
-     * @param mode
-     *            the mode with which to encode the string
-     * @return the encoded string
-     */
-	public String encodeString(String unencoded, ENCODING_MODE mode) {
-	    return encodeString0(unencoded, mode, xssApi);
-	}
 	
-	private static String encodeString0(String unencoded, ENCODING_MODE mode, XSSAPI xssApi) {
-        switch ( mode ) {
-        case HTML:
-            return xssApi.encodeForHTML(unencoded);
-        case HTML_ATTR:
-            return xssApi.encodeForHTMLAttr(unencoded);
-        case XML:
-            return xssApi.encodeForXML(unencoded);
-        case XML_ATTR:
-            return xssApi.encodeForHTMLAttr(unencoded);
-        case JS:
-            return xssApi.encodeForJSString(unencoded);
-            default:
-                return unencoded;
-        }	    
-	}
-
 	/**
 	 * Encodes the unencoded string using the specified mode. This will be
 	 * deferred to the corresponding OWASP ESAPI encoding method.
@@ -97,7 +70,20 @@ public class XSSSupport {
 
 	    if ( XSS_API == null )
 	        throw new IllegalStateException("No XSS_API field set. Is the XSSAPI service available?");
-	    return encodeString0(unencoded, mode, XSS_API);
+	    switch ( mode ) {
+        case HTML:
+            return XSS_API.encodeForHTML(unencoded);
+        case HTML_ATTR:
+            return XSS_API.encodeForHTMLAttr(unencoded);
+        case XML:
+            return XSS_API.encodeForXML(unencoded);
+        case XML_ATTR:
+            return XSS_API.encodeForHTMLAttr(unencoded);
+        case JS:
+            return XSS_API.encodeForJSString(unencoded);
+            default:
+                return unencoded;
+        }
 	}
 
     /**
