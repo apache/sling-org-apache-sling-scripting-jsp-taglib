@@ -24,7 +24,6 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport;
 import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport.ENCODING_MODE;
-import org.apache.sling.xss.XSSAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
