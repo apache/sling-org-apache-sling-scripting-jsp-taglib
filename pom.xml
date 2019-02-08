@@ -49,64 +49,64 @@
                             !org.apache.commons.configuration.*,
                             !org.owasp.validator.html.*,
                             !org.apache.log4j.*,
-							*
-						</Import-Package>
-						<Embed-Dependency>
-							org.apache.sling.scripting.core;inline=org/apache/sling/scripting/core/servlet/CaptureResponseWrapper.class
-						</Embed-Dependency>
-					</instructions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+                            *
+                        </Import-Package>
+                        <Embed-Dependency>
+                            org.apache.sling.scripting.core;inline=org/apache/sling/scripting/core/servlet/CaptureResponseWrapper.class
+                        </Embed-Dependency>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.0</version>
-			<!-- using compile scope to help IDEs -->
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.sling</groupId>
-			<artifactId>org.apache.sling.api</artifactId>
-			<version>2.10.0</version>
-			<!-- using compile scope to help IDEs -->
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.sling</groupId>
-			<artifactId>org.apache.sling.scripting.core</artifactId>
-			<version>2.0.36</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.sling</groupId>
-			<artifactId>org.apache.sling.scripting.jsp</artifactId>
-			<version>2.0.8</version>
-			<!-- using compile scope to help IDEs -->
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.sling</groupId>
-		    <artifactId>org.apache.sling.caconfig.api</artifactId>
-		    <version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>osgi.core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<!-- using compile scope to help IDEs -->
-			<scope>compile</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <!-- using compile scope to help IDEs -->
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.api</artifactId>
+            <version>2.10.0</version>
+            <!-- using compile scope to help IDEs -->
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.scripting.core</artifactId>
+            <version>2.0.36</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.scripting.jsp</artifactId>
+            <version>2.0.8</version>
+            <!-- using compile scope to help IDEs -->
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.caconfig.api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <!-- using compile scope to help IDEs -->
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.xss</artifactId>
@@ -120,30 +120,30 @@
             <scope>provided</scope>
         </dependency>
 
-		<!-- Testing Dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-junit4</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.sling</groupId>
-			<artifactId>org.apache.sling.commons.testing</artifactId>
-			<version>2.0.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.sling</groupId>
-			<artifactId>org.apache.sling.commons.johnzon</artifactId>
-			<version>1.0.0</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <!-- Testing Dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.commons.testing</artifactId>
+            <version>2.0.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.commons.johnzon</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
