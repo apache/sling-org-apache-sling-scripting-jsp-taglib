@@ -95,8 +95,4 @@ public class XSSSupport {
     public static EncodingMode getEncodingMode(String modeStr) {
         return EncodingMode.valueOf(modeStr.toUpperCase());
     }
-
-    private XSSSupport() {
-        // hide the public constructor
-    }
 }
