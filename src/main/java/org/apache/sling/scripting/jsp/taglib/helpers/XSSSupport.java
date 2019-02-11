@@ -34,7 +34,7 @@ public class XSSSupport {
     @Reference
     private XSSAPI xssApi;
     
-    private static XSSAPI XSS_API;
+    private static volatile XSSAPI XSS_API;
     
     protected void activate() {
         XSS_API = xssApi;
