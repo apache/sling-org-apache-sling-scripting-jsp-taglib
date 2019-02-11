@@ -16,11 +16,8 @@
  */
 package org.apache.sling.scripting.jsp.taglib;
 
-import java.util.Arrays;
-
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.slf4j.Logger;
