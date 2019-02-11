@@ -135,14 +135,31 @@
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.commons.testing</artifactId>
-            <version>2.0.12</version>
+            <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
+            <version>2.3.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.jcr-mock</artifactId>
+            <version>1.4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
+            <scope>test</scope>
+        </dependency>        
+        <dependency>
+            <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.commons.johnzon</artifactId>
             <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.scripting.api</artifactId>
+            <version>2.1.8</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

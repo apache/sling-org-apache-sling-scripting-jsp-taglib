@@ -22,9 +22,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.commons.testing.sling.MockResource;
-import org.apache.sling.commons.testing.sling.MockResourceResolver;
+import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +38,12 @@ public class TestGetParentTag {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestGetParentTag.class);
+
+    @Rule
+    public final SlingContext ctx = new SlingContext();
 	private GetParentTag getParentTag;
-	private MockResource resource;
 	private MockPageContext pageContext;
-	private MockResource child;
+	private Resource child;
 	private static final String VAR_KEY = "resource";
 	private static final String TEST_ABSOLUTE_PATH = "/content";
 	private static final String TEST_RELATIVE_PATH = "test";
@@ -53,15 +55,13 @@ public class TestGetParentTag {
 	public void init() {
 		log.info("init");
 
-		final MockResourceResolver resolver = new MockResourceResolver();
+		ctx.build()
+		    .resource("/")
+		    .resource(TEST_ABSOLUTE_PATH)
+		    .resource(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH);
 
-		resource = new MockResource(resolver, TEST_ABSOLUTE_PATH, "test");
-		resolver.addResource(resource);
-
-		child = new MockResource(resolver, TEST_ABSOLUTE_PATH
-				+ "/" + TEST_RELATIVE_PATH, "test");
-		resolver.addResource(child);
-
+		child = ctx.resourceResolver().getResource(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH);
+		
 		getParentTag = new GetParentTag();
 
 		pageContext = new MockPageContext();

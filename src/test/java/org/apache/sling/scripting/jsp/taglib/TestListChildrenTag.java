@@ -23,9 +23,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.commons.testing.sling.MockResource;
-import org.apache.sling.commons.testing.sling.MockResourceResolver;
+import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +38,11 @@ public class TestListChildrenTag {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestListChildrenTag.class);
+
+    @Rule
+    public final SlingContext ctx = new SlingContext();
 	private ListChildrenTag listChildrenTag = new ListChildrenTag();
-	private MockResource resource;
+	private Resource resource;
 	private MockPageContext pageContext;
 	private static final String TEST_PATH = "/content";
 	private static final String VAR_KEY = "children";
@@ -52,15 +55,13 @@ public class TestListChildrenTag {
 		log.info("init");
 
 		log.info("Creating Resource Structure");
-		final MockResourceResolver resolver = new MockResourceResolver();
-		resource = new MockResource(resolver, TEST_PATH, "test");
-		resolver.addResource(resource);
-		MockResource child1 = new MockResource(resolver, TEST_PATH + "/child1",
-				"test");
-		resolver.addResource(child1);
-		MockResource child2 = new MockResource(resolver, TEST_PATH + "/child2",
-				"test");
-		resolver.addResource(child2);
+		ctx.build()
+		    .resource("/")
+		    .resource(TEST_PATH)
+		    .resource(TEST_PATH + "/child1")
+		    .resource(TEST_PATH + "/child2");
+		
+		resource = ctx.resourceResolver().getResource(TEST_PATH);
 
 		log.info("Adding page context");
 		pageContext = new MockPageContext();

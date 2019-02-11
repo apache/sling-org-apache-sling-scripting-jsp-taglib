@@ -22,6 +22,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,13 +54,9 @@ public class GetParentTag extends TagSupport {
 
         if (resource != null) {
             if (level != null) {
-                if (resource.getPath() != null) {
-                    String[] segments = resource.getPath().split("\\/");
-                    int end = Integer.parseInt(level, 10);
-                    String parentPath = "/" + StringUtils.join(Arrays.copyOfRange(segments, 1, end + 1), "/");
-                    log.debug("Retrieving {} parent resource at path {}", level, parentPath);
-                    parent = resource.getResourceResolver().getResource(parentPath);
-                }
+                String parentPath = ResourceUtil.getParent(resource.getPath(), Integer.parseInt(level, 10));
+                log.debug("Retrieving {} parent resource at path {}", level, parentPath);
+                parent = resource.getResourceResolver().getResource(parentPath);
             } else {
                 log.debug("Retrieving parent resource");
                 parent = resource.getParent();

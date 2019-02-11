@@ -24,6 +24,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,8 @@ public class TestEncodeTag {
     private EncodeTag encodeTag;
     private MockPageContext pageContext;
     private StringBuilder sb;
-
+    @Rule
+    public XSSSupportRule xssSupportRule = new XSSSupportRule();
     /**
      * Initializes the fields for this test.
      */
