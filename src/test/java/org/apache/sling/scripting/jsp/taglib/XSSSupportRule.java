@@ -18,7 +18,7 @@ package org.apache.sling.scripting.jsp.taglib;
 
 import java.lang.reflect.Field;
 
-import org.apache.sling.scripting.jsp.taglib.internal.XSSSupport;
+import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport;
 import org.apache.sling.xss.impl.XSSAPIImpl;
 import org.apache.sling.xss.impl.XSSFilterImpl;
 import org.junit.rules.ExternalResource;

@@ -22,8 +22,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.scripting.jsp.taglib.internal.XSSSupport;
-import org.apache.sling.scripting.jsp.taglib.internal.XSSSupport.EncodingMode;
+import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport;
+import org.apache.sling.scripting.jsp.taglib.helpers.XSSSupport.ENCODING_MODE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class EncodeTag extends BodyTagSupport {
     private static final Logger log = LoggerFactory.getLogger(EncodeTag.class);
     private String value;
     private String defaultValue;
-    private EncodingMode mode;
+    private ENCODING_MODE mode;
     private boolean readBody = false;
 
     /*
