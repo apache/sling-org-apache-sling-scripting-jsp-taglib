@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.sling.scripting.jsp.taglib.helpers;
+package org.apache.sling.scripting.jsp.taglib.internal;
 
 import org.apache.sling.xss.XSSAPI;
 import org.osgi.service.component.annotations.Component;
@@ -47,7 +47,7 @@ public class XSSSupport {
 	/**
 	 * The encoding modes supported by this tag.
 	 */
-	public enum ENCODING_MODE {
+	public enum EncodingMode {
 		/**
 		 * Encodes the content as HTML
 		 */
@@ -63,10 +63,8 @@ public class XSSSupport {
 	 * @param mode
 	 *            the mode with which to encode the string
 	 * @return the encoded string
-	 * @deprecated since bundle version 2.4.0. Use the {@link #encodeString(String, ENCODING_MODE)} method instead.
 	 */
-	@Deprecated
-	public static String encode(String unencoded, ENCODING_MODE mode) {
+	public static String encode(String unencoded, EncodingMode mode) {
 
 	    if ( XSS_API == null )
 	        throw new IllegalStateException("No XSS_API field set. Is the XSSAPI service available?");
@@ -94,7 +92,7 @@ public class XSSSupport {
      * @param modeStr the mode string
      * @return the encoding mode
      */
-    public static ENCODING_MODE getEncodingMode(String modeStr) {
-        return ENCODING_MODE.valueOf(modeStr.toUpperCase());
+    public static EncodingMode getEncodingMode(String modeStr) {
+        return EncodingMode.valueOf(modeStr.toUpperCase());
     }
 }
