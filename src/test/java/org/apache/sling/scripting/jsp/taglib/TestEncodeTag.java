@@ -182,7 +182,7 @@ public class TestEncodeTag {
         encodeTag.doEndTag();
 
         log.info("Checking result");
-        assertEquals("&amp;amp&#x3b;Hello World&#x21;", sb.toString().trim());
+        assertEquals("&amp;amp;Hello World!", sb.toString().trim());
 
         log.info("Test successful!");
     }

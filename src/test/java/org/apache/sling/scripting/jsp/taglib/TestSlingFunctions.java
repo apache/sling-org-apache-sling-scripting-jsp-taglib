@@ -87,12 +87,12 @@ public class TestSlingFunctions {
 		log.info("testEncode");
 
 		log.info("Testing HTML Encoding");
-		assertEquals("&amp;nbsp&#x3b;Here is some text&#x21;",
+		assertEquals("&amp;nbsp;Here is some text!",
 				SlingFunctions.encode("&nbsp;Here is some text!", "HTML"));
 
 		log.info("Testing HTML Attr Encoding");
 		assertEquals(
-				"&amp;nbsp&#x3b;Here&#x20;is&#x20;some&#x20;text&#x21;&quot;",
+				"&amp;nbsp;Here is some text!&#34;",
 				SlingFunctions
 						.encode("&nbsp;Here is some text!\"", "HTML_ATTR"));
 
