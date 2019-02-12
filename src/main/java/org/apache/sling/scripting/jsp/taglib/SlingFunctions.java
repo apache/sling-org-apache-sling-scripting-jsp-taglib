@@ -305,9 +305,4 @@ public class SlingFunctions {
     private static Class<?> loadClass(String className) throws ClassNotFoundException {
         return Thread.currentThread().getContextClassLoader().loadClass(className);
     }
-
-    private SlingFunctions() {
-        // hide the public constructor since it's a utility class
-    }
-
 }

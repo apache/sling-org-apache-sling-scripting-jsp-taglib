@@ -57,7 +57,7 @@ public class FindResourcesTag extends TagSupport {
 
         log.debug("Finding resources using query: {} of language {}", query, language);
 
-        ResourceResolver resolver = SlingFunctions.getResourceResolver(pageContext);
+        ResourceResolver resolver = getResourceResolver();
         final Iterator<Resource> resources = resolver.findResources(query, language);
 
         log.debug("Saving resources to variable {}", var);
@@ -65,6 +65,15 @@ public class FindResourcesTag extends TagSupport {
 
         return EVAL_PAGE;
     }
+    
+    /**
+     * Method for retrieving the ResourceResolver from the page context.
+     * 
+     * @return the resource resolver
+     */
+    protected ResourceResolver getResourceResolver() {
+        return SlingFunctions.getResourceResolver(pageContext);
+    }    
 
     /**
      * Gets the language.

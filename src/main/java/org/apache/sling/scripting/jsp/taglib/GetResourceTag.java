@@ -48,7 +48,7 @@ public class GetResourceTag extends TagSupport {
     public int doEndTag() {
         log.trace("doEndTag");
 
-        ResourceResolver resolver = SlingFunctions.getResourceResolver(pageContext);
+        ResourceResolver resolver = getResourceResolver();
         Resource resource = null;
         if (path.startsWith("/")) {
             log.debug("Retrieving resource at absolute path: {}", path);
@@ -67,6 +67,16 @@ public class GetResourceTag extends TagSupport {
 
         return EVAL_PAGE;
     }
+
+    /**
+     * Method for retrieving the ResourceResolver from the page context.
+     * 
+     * @return the resource resolver
+     */
+    protected ResourceResolver getResourceResolver() {
+        return SlingFunctions.getResourceResolver(pageContext);
+    }    
+
 
     /**
      * Gets the base resource.
