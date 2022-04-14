@@ -1,0 +1,1 @@
+Embed-Dependency: org.apache.sling.scripting.core;inline=org/apache/sling/scripting/core/servlet/CaptureResponseWrapper.class
