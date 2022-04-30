@@ -1,2 +1,16 @@
-Import-Package: javax.jcr;resolution:=optional, javax.servlet.jsp.*;version=2.0, !bsh.*, !nu.xom.*, !org.apache.commons.beanutils.*, !org.apache.commons.configuration.*, !org.owasp.validator.html.*, !org.apache.log4j.*, !org.apache.sling.scripting.core.servlet, *
-Embed-Dependency: org.apache.sling.scripting.core;inline=org/apache/sling/scripting/core/servlet/CaptureResponseWrapper.class
+Import-Package:\
+    javax.jcr;resolution:=optional,\
+    javax.servlet.jsp.*;version=2.0,\
+    !bsh.*,\
+    !nu.xom.*,\
+    !org.apache.commons.beanutils.*,\
+    !org.apache.commons.configuration.*,\
+    !org.owasp.validator.html.*,\
+    !org.apache.log4j.*,\
+    *
+
+-includeresource:\
+    @org.apache.sling.scripting.core-*.jar!/org/apache/sling/scripting/core/servlet/CaptureResponseWrapper.class
+
+-removeheaders:\
+    Private-Package
