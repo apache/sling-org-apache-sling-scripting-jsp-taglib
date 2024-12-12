@@ -1,28 +1,30 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
+
+import javax.servlet.jsp.PageContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.adapter.Adaptable;
@@ -48,7 +50,7 @@ public class SlingFunctions {
 
     /**
      * Adapt the adaptable to the adapter class.
-     * 
+     *
      * @param adaptable the adaptable instance
      * @param adapter   the class to which to adapt the adaptable
      * @return the adapted class instance
@@ -75,7 +77,7 @@ public class SlingFunctions {
 
     /**
      * XSS encodes the specified text using the specified mode.
-     * 
+     *
      * @param value The text to encode
      * @param mode  The XSS mode to use, see XSSSupport for the list of available
      *              modes
@@ -88,7 +90,7 @@ public class SlingFunctions {
     /**
      * Searches for resources using the given query formulated in the given
      * language.
-     * 
+     *
      * @param resourceResolver the resource resolver to use to find resources with
      *                         the specified query
      * @param query            The query string to use to find the resources.
@@ -110,7 +112,7 @@ public class SlingFunctions {
 
     /**
      * Method for retrieving an absolute parent resource.
-     * 
+     *
      * @param current the current resource
      * @param level   the absolute level for the parent resource to retrieve
      * @return the parent resource at the level
@@ -133,7 +135,7 @@ public class SlingFunctions {
 
     /**
      * Method for retrieving the CA Config resource for a specified resource
-     * 
+     *
      * @param resource the resource for which to retrieve the CA Config resource
      * @param bucket   the bucket name of the configuration to retrieve
      * @param name     the configuration name to retrieve
@@ -141,14 +143,14 @@ public class SlingFunctions {
      */
     public static final Resource getCAConfigResource(Resource resource, String bucket, String name) {
         log.trace("getCAConfigResource");
-        ConfigurationResourceResolver caResourceResolver = resource.getResourceResolver()
-                .adaptTo(ConfigurationResourceResolver.class);
+        ConfigurationResourceResolver caResourceResolver =
+                resource.getResourceResolver().adaptTo(ConfigurationResourceResolver.class);
         return caResourceResolver.getResource(resource, bucket, name);
     }
 
     /**
      * Method for retrieving the CA Config resources for a specified resource
-     * 
+     *
      * @param resource the resource for which to retrieve the CA Config resources
      * @param bucket   the bucket name of the configuration to retrieve
      * @param name     the configuration name to retrieve
@@ -156,15 +158,15 @@ public class SlingFunctions {
      */
     public static final Iterator<Resource> getCAConfigResources(Resource resource, String bucket, String name) {
         log.trace("getCAConfigResource");
-        ConfigurationResourceResolver caResourceResolver = resource.getResourceResolver()
-                .adaptTo(ConfigurationResourceResolver.class);
+        ConfigurationResourceResolver caResourceResolver =
+                resource.getResourceResolver().adaptTo(ConfigurationResourceResolver.class);
         return caResourceResolver.getResourceCollection(resource, bucket, name).iterator();
     }
 
     /**
      * Function for retrieving all of the parent resources of a specified resource,
      * returning them in hierarchy order.
-     * 
+     *
      * @param current    the current resource for which to retrieve the parents
      * @param startDepth The depth at which to start, for example given a path of:
      *                   /content/page1/page2/page3 and a start depth of 3, the
@@ -195,7 +197,7 @@ public class SlingFunctions {
 
     /**
      * Gets the resource at the relative path to the provided resource.
-     * 
+     *
      * @param base the resource relative to which to find the path
      * @param path the relative path at which to find the resource
      * @return the resource
@@ -216,7 +218,7 @@ public class SlingFunctions {
 
     /**
      * Method allow for the retrieval of resources.
-     * 
+     *
      * @param resolver the current resource resolver
      * @param path     the path of the resource to retrieve
      * @return the resource at the path or null
@@ -233,12 +235,12 @@ public class SlingFunctions {
 
     /**
      * Method for retrieving the ResourceResolver from the page context.
-     * 
+     *
      * @return the resource resolver
      */
     protected static final ResourceResolver getResourceResolver(PageContext pageContext) {
-        final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
-                .getAttribute(SlingBindings.class.getName());
+        final SlingBindings bindings =
+                (SlingBindings) pageContext.getRequest().getAttribute(SlingBindings.class.getName());
         final SlingScriptHelper scriptHelper = bindings.getSling();
         return scriptHelper.getRequest().getResourceResolver();
     }
@@ -247,7 +249,7 @@ public class SlingFunctions {
      * Gets the value of the specified key from the ValueMap and either coerses the
      * value into the specified type or uses the specified type as a default
      * depending on the parameter passed in.
-     * 
+     *
      * @param properties    the ValueMap from which to retrieve the value
      * @param key           the key for the value to retrieve
      * @param defaultOrType either the default value or the class to which to coerce
@@ -265,7 +267,7 @@ public class SlingFunctions {
 
     /**
      * Method for checking whether or not a resource has child resources.
-     * 
+     *
      * @param resource the resource to check for child resources
      * @return true if the resource has child resources, false otherwise
      * @since 2.2.2
@@ -276,7 +278,7 @@ public class SlingFunctions {
 
     /**
      * Method for allowing the invocation of the Sling Resource listChildren method.
-     * 
+     *
      * @param resource the resource of which to list the children
      * @return the children of the resource
      * @see org.apache.sling.api.resource.Resource#listChildren()
@@ -296,7 +298,7 @@ public class SlingFunctions {
 
     /**
      * Loads the Class for the name from the current thread's classload.
-     * 
+     *
      * @param className The name of the class to load
      * @return the class
      * @throws ClassNotFoundException a class with the specified name could not be

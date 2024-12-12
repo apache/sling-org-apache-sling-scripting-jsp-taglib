@@ -1,30 +1,28 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import javax.jcr.Session;
+import javax.servlet.ServletRequest;
 
 import java.util.Arrays;
 import java.util.Iterator;
-
-import javax.jcr.Session;
-import javax.servlet.ServletRequest;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.jcr.MockJcr;
@@ -36,9 +34,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Unit Tests for the Class FindResourceTag.
- * 
+ *
  * @see org.apache.sling.scripting.jsp.taglib.FindResourceTag
  */
 public class TestFindResourceTag {
@@ -47,6 +49,7 @@ public class TestFindResourceTag {
 
     @Rule
     public final SlingContext ctx = new SlingContext(ResourceResolverType.JCR_MOCK);
+
     private FindResourcesTag findResourcesTag;
     private Resource resource;
     private MockPageContext pageContext;
@@ -60,12 +63,11 @@ public class TestFindResourceTag {
     public void init() {
         log.info("init");
 
-        ctx.build()
-            .resource("/")
-            .resource(TEST_PATH);
-        
+        ctx.build().resource("/").resource(TEST_PATH);
+
         resource = ctx.resourceResolver().getResource(TEST_PATH);
-        MockJcr.setQueryResult(ctx.resourceResolver().adaptTo(Session.class), Arrays.asList(resource.adaptTo(javax.jcr.Node.class)));
+        MockJcr.setQueryResult(
+                ctx.resourceResolver().adaptTo(Session.class), Arrays.asList(resource.adaptTo(javax.jcr.Node.class)));
 
         pageContext = new MockPageContext() {
             public ServletRequest getRequest() {

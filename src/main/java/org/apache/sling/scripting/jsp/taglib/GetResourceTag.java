@@ -1,18 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
 
@@ -70,17 +72,16 @@ public class GetResourceTag extends TagSupport {
 
     /**
      * Method for retrieving the ResourceResolver from the page context.
-     * 
+     *
      * @return the resource resolver
      */
     protected ResourceResolver getResourceResolver() {
         return SlingFunctions.getResourceResolver(pageContext);
-    }    
-
+    }
 
     /**
      * Gets the base resource.
-     * 
+     *
      * @return the base resource
      */
     public Resource getBase() {
@@ -89,7 +90,7 @@ public class GetResourceTag extends TagSupport {
 
     /**
      * Get the path of the resource to retrieve.
-     * 
+     *
      * @return the path
      */
     public String getPath() {
@@ -98,7 +99,7 @@ public class GetResourceTag extends TagSupport {
 
     /**
      * Gets the variable name to which to save the list of children.
-     * 
+     *
      * @return the variable name
      */
     public String getVar() {
@@ -107,7 +108,7 @@ public class GetResourceTag extends TagSupport {
 
     /**
      * Sets the base resource.
-     * 
+     *
      * @param base the new base resource
      */
     public void setBase(Resource base) {
@@ -116,7 +117,7 @@ public class GetResourceTag extends TagSupport {
 
     /**
      * Set the path of the resource to retrieve.
-     * 
+     *
      * @param path the path
      */
     public void setPath(String path) {
@@ -125,7 +126,7 @@ public class GetResourceTag extends TagSupport {
 
     /**
      * Sets the variable name to which to save the list of children.
-     * 
+     *
      * @param var the variable name
      */
     public void setVar(String var) {

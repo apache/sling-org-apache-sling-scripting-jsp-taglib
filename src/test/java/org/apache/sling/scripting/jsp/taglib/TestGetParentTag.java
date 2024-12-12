@@ -1,25 +1,22 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
@@ -29,99 +26,101 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Unit Tests for the Class GetResourceTag.
- * 
+ *
  * @see org.apache.sling.scripting.jsp.taglib.GetResourceTag
  */
 public class TestGetParentTag {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(TestGetParentTag.class);
+    private static final Logger log = LoggerFactory.getLogger(TestGetParentTag.class);
 
     @Rule
     public final SlingContext ctx = new SlingContext();
-	private GetParentTag getParentTag;
-	private MockPageContext pageContext;
-	private Resource child;
-	private static final String VAR_KEY = "resource";
-	private static final String TEST_ABSOLUTE_PATH = "/content";
-	private static final String TEST_RELATIVE_PATH = "test";
 
-	/**
-	 * Initializes the fields for this test.
-	 */
-	@Before
-	public void init() {
-		log.info("init");
+    private GetParentTag getParentTag;
+    private MockPageContext pageContext;
+    private Resource child;
+    private static final String VAR_KEY = "resource";
+    private static final String TEST_ABSOLUTE_PATH = "/content";
+    private static final String TEST_RELATIVE_PATH = "test";
 
-		ctx.build()
-		    .resource("/")
-		    .resource(TEST_ABSOLUTE_PATH)
-		    .resource(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH);
+    /**
+     * Initializes the fields for this test.
+     */
+    @Before
+    public void init() {
+        log.info("init");
 
-		child = ctx.resourceResolver().getResource(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH);
-		
-		getParentTag = new GetParentTag();
+        ctx.build().resource("/").resource(TEST_ABSOLUTE_PATH).resource(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH);
 
-		pageContext = new MockPageContext();
-		getParentTag.setPageContext(pageContext);
+        child = ctx.resourceResolver().getResource(TEST_ABSOLUTE_PATH + "/" + TEST_RELATIVE_PATH);
 
-		log.info("init Complete");
-	}
+        getParentTag = new GetParentTag();
 
-	/**
-	 * Tests using an absolute path.
-	 */
-	@Test
-	public void testAbsoluteParent() {
-		log.info("testAbsoluteParent");
+        pageContext = new MockPageContext();
+        getParentTag.setPageContext(pageContext);
 
-		getParentTag.setVar(VAR_KEY);
-		getParentTag.setResource(child);
-		getParentTag.setLevel("1");
-		getParentTag.doEndTag();
-		Object result = pageContext.getAttribute(VAR_KEY);
-		assertNotNull(result);
-		assertTrue(result instanceof Resource);
-		assertEquals(TEST_ABSOLUTE_PATH, ((Resource) result).getPath());
+        log.info("init Complete");
+    }
 
-		log.info("Test successful!");
-	}
+    /**
+     * Tests using an absolute path.
+     */
+    @Test
+    public void testAbsoluteParent() {
+        log.info("testAbsoluteParent");
 
-	/**
-	 * Tests using an relative path.
-	 */
-	@Test
-	public void testParent() {
-		log.info("testParent");
+        getParentTag.setVar(VAR_KEY);
+        getParentTag.setResource(child);
+        getParentTag.setLevel("1");
+        getParentTag.doEndTag();
+        Object result = pageContext.getAttribute(VAR_KEY);
+        assertNotNull(result);
+        assertTrue(result instanceof Resource);
+        assertEquals(TEST_ABSOLUTE_PATH, ((Resource) result).getPath());
 
-		getParentTag.setVar(VAR_KEY);
-		getParentTag.setResource(child);
-		getParentTag.doEndTag();
-		Object result = pageContext.getAttribute(VAR_KEY);
-		assertNotNull(result);
-		assertTrue(result instanceof Resource);
-		assertEquals(TEST_ABSOLUTE_PATH, ((Resource) result).getPath());
+        log.info("Test successful!");
+    }
 
-		log.info("Test successful!");
-	}
+    /**
+     * Tests using an relative path.
+     */
+    @Test
+    public void testParent() {
+        log.info("testParent");
 
-	/**
-	 * Tests to see what happens if a bad path is specified, this should just
-	 * return a null value instead of a resource.
-	 */
-	@Test
-	public void testBadPath() {
-		log.info("testBadPath");
+        getParentTag.setVar(VAR_KEY);
+        getParentTag.setResource(child);
+        getParentTag.doEndTag();
+        Object result = pageContext.getAttribute(VAR_KEY);
+        assertNotNull(result);
+        assertTrue(result instanceof Resource);
+        assertEquals(TEST_ABSOLUTE_PATH, ((Resource) result).getPath());
 
-		getParentTag.setVar(VAR_KEY);
-		getParentTag.setResource(child);
-		getParentTag.setLevel("4");
-		getParentTag.doEndTag();
-		Object result = pageContext.getAttribute(VAR_KEY);
-		assertNull(result);
+        log.info("Test successful!");
+    }
 
-		log.info("Test successful!");
-	}
+    /**
+     * Tests to see what happens if a bad path is specified, this should just
+     * return a null value instead of a resource.
+     */
+    @Test
+    public void testBadPath() {
+        log.info("testBadPath");
+
+        getParentTag.setVar(VAR_KEY);
+        getParentTag.setResource(child);
+        getParentTag.setLevel("4");
+        getParentTag.doEndTag();
+        Object result = pageContext.getAttribute(VAR_KEY);
+        assertNull(result);
+
+        log.info("Test successful!");
+    }
 }
