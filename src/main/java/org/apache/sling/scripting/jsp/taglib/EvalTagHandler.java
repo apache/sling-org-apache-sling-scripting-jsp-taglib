@@ -1,18 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
 
@@ -69,8 +71,8 @@ public class EvalTagHandler extends TagSupport {
     public int doEndTag() throws JspException {
         log.debug("EvalTagHandler doEndTag");
 
-        final SlingBindings bindings = (SlingBindings) pageContext.getRequest()
-                .getAttribute(SlingBindings.class.getName());
+        final SlingBindings bindings =
+                (SlingBindings) pageContext.getRequest().getAttribute(SlingBindings.class.getName());
         final SlingScriptHelper scriptHelper = bindings.getSling();
         final ServletResolver servletResolver = scriptHelper.getService(ServletResolver.class);
 
@@ -81,8 +83,10 @@ public class EvalTagHandler extends TagSupport {
             if (this.resource != null) {
                 evalResource = this.resource;
             } else if (this.resourceType != null) {
-                evalResource = new SyntheticResource(bindings.getRequest().getResourceResolver(),
-                        bindings.getResource().getPath(), this.resourceType);
+                evalResource = new SyntheticResource(
+                        bindings.getRequest().getResourceResolver(),
+                        bindings.getResource().getPath(),
+                        this.resourceType);
             } else {
                 evalResource = bindings.getResource();
             }
@@ -93,7 +97,8 @@ public class EvalTagHandler extends TagSupport {
             if (!script.startsWith("/")) {
 
                 // resolve relative script
-                String parentPath = ResourceUtil.getParent(scriptHelper.getScript().getScriptResource().getPath());
+                String parentPath = ResourceUtil.getParent(
+                        scriptHelper.getScript().getScriptResource().getPath());
                 // check if parent resides on search path
                 for (String sp : rr.getSearchPath()) {
                     if (parentPath.startsWith(sp)) {
@@ -131,7 +136,6 @@ public class EvalTagHandler extends TagSupport {
         } catch (Exception e) {
             log.error("Error while executing script " + script, e);
             throw new JspException("Error while executing script " + script, e);
-
         }
     }
 

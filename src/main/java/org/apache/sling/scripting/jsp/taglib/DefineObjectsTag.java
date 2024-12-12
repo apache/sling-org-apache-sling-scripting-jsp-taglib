@@ -1,18 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
 
@@ -96,6 +98,7 @@ public class DefineObjectsTag extends TagSupport {
     private String resourceResolverName = DEFAULT_RESOURCE_RESOLVER_NAME;
 
     static Class<?> JCR_NODE_CLASS;
+
     static {
         try {
             JCR_NODE_CLASS = DefineObjectsTag.class.getClassLoader().loadClass("javax.jcr.Node");
@@ -126,7 +129,8 @@ public class DefineObjectsTag extends TagSupport {
      */
     @Override
     public int doEndTag() {
-        final SlingBindings bindings = (SlingBindings)pageContext.getRequest().getAttribute(SlingBindings.class.getName());
+        final SlingBindings bindings =
+                (SlingBindings) pageContext.getRequest().getAttribute(SlingBindings.class.getName());
         final SlingScriptHelper scriptHelper = bindings.getSling();
 
         pageContext.setAttribute(requestName, scriptHelper.getRequest());
@@ -137,7 +141,7 @@ public class DefineObjectsTag extends TagSupport {
         pageContext.setAttribute(slingName, scriptHelper);
         pageContext.setAttribute(logName, bindings.getLog());
         pageContext.setAttribute(bindingsName, bindings);
-        if ( JCR_NODE_CLASS != null ) {
+        if (JCR_NODE_CLASS != null) {
             final Object node = resource.adaptTo(JCR_NODE_CLASS);
             if (node != null) {
                 pageContext.setAttribute(nodeName, node);

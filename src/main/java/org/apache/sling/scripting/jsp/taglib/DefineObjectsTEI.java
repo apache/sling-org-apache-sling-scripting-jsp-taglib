@@ -1,20 +1,37 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.scripting.jsp.taglib;
+
+import javax.servlet.jsp.tagext.TagData;
+import javax.servlet.jsp.tagext.TagExtraInfo;
+import javax.servlet.jsp.tagext.VariableInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.scripting.SlingScriptHelper;
+import org.slf4j.Logger;
 
 import static org.apache.sling.scripting.jsp.taglib.DefineObjectsTag.DEFAULT_BINDINGS_NAME;
 import static org.apache.sling.scripting.jsp.taglib.DefineObjectsTag.DEFAULT_LOG_NAME;
@@ -24,21 +41,6 @@ import static org.apache.sling.scripting.jsp.taglib.DefineObjectsTag.DEFAULT_RES
 import static org.apache.sling.scripting.jsp.taglib.DefineObjectsTag.DEFAULT_RESOURCE_RESOLVER_NAME;
 import static org.apache.sling.scripting.jsp.taglib.DefineObjectsTag.DEFAULT_RESPONSE_NAME;
 import static org.apache.sling.scripting.jsp.taglib.DefineObjectsTag.DEFAULT_SLING_NAME;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagExtraInfo;
-import javax.servlet.jsp.tagext.VariableInfo;
-
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.slf4j.Logger;
 
 /**
  * This class defines the scripting variables that are created by the
@@ -121,40 +123,31 @@ public class DefineObjectsTEI extends TagExtraInfo {
 
         List<VariableInfo> varInfos = new ArrayList<>();
 
-        addVar(varInfos, data, ATTR_REQUEST_NAME, DEFAULT_REQUEST_NAME,
-            SLING_REQUEST_CLASS);
-        addVar(varInfos, data, ATTR_RESPONSE_NAME, DEFAULT_RESPONSE_NAME,
-            SLING_RESPONSE_CLASS);
+        addVar(varInfos, data, ATTR_REQUEST_NAME, DEFAULT_REQUEST_NAME, SLING_REQUEST_CLASS);
+        addVar(varInfos, data, ATTR_RESPONSE_NAME, DEFAULT_RESPONSE_NAME, SLING_RESPONSE_CLASS);
 
-        addVar(varInfos, data, ATTR_RESOURCE_NAME, DEFAULT_RESOURCE_NAME,
-            RESOURCE_CLASS);
-        if ( DefineObjectsTag.JCR_NODE_CLASS != null ) {
+        addVar(varInfos, data, ATTR_RESOURCE_NAME, DEFAULT_RESOURCE_NAME, RESOURCE_CLASS);
+        if (DefineObjectsTag.JCR_NODE_CLASS != null) {
             addVar(varInfos, data, ATTR_NODE_NAME, DEFAULT_NODE_NAME, NODE_CLASS);
         }
 
-        addVar(varInfos, data, ATTR_RESOURCE_RESOLVER_NAME,
-            DEFAULT_RESOURCE_RESOLVER_NAME, RESOURCE_RESOLVER_CLASS);
+        addVar(varInfos, data, ATTR_RESOURCE_RESOLVER_NAME, DEFAULT_RESOURCE_RESOLVER_NAME, RESOURCE_RESOLVER_CLASS);
 
-        addVar(varInfos, data, ATTR_SLING_NAME,
-            DEFAULT_SLING_NAME, SLING_CLASS);
+        addVar(varInfos, data, ATTR_SLING_NAME, DEFAULT_SLING_NAME, SLING_CLASS);
 
-        addVar(varInfos, data, ATTR_LOG_NAME,
-                DEFAULT_LOG_NAME, LOG_CLASS);
+        addVar(varInfos, data, ATTR_LOG_NAME, DEFAULT_LOG_NAME, LOG_CLASS);
 
-        addVar(varInfos, data, ATTR_BINDINGS_NAME,
-                DEFAULT_BINDINGS_NAME, BINDINGS_CLASS);
+        addVar(varInfos, data, ATTR_BINDINGS_NAME, DEFAULT_BINDINGS_NAME, BINDINGS_CLASS);
 
         return varInfos.toArray(new VariableInfo[varInfos.size()]);
-
     }
 
-    private void addVar(List<VariableInfo> varInfos, TagData data,
-            String attrName, String defaultValue, String varClass) {
+    private void addVar(
+            List<VariableInfo> varInfos, TagData data, String attrName, String defaultValue, String varClass) {
         String value = getValue(data, attrName, defaultValue);
 
         if (value != null && varClass != null) {
-            varInfos.add(new VariableInfo(value, varClass, true,
-                VariableInfo.AT_END));
+            varInfos.add(new VariableInfo(value, varClass, true, VariableInfo.AT_END));
         }
     }
 
