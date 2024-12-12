@@ -76,7 +76,6 @@
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.xss</artifactId>
             <version>2.0.4</version>
-            <!-- TODO - check if lower version is possible -->
             <scope>provided</scope>
         </dependency>
 
